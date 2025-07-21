@@ -3,446 +3,932 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Participantes - Organizado y Dinámico</title>
+    <title>Dashboard de Participantes - Sistema Avanzado</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Estilos base para las tarjetas y tablas */
-        .card {
-            @apply bg-white p-6 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl;
-        }
-        .card-title {
-            @apply text-xl lg:text-2xl font-extrabold mb-4 text-gray-800 border-b-2 border-blue-200 pb-2;
-        }
-        .main-card-value { /* Estilo específico para el total de participantes */
-            @apply text-5xl lg:text-6xl font-bold text-blue-700 animate-pulse;
-        }
-        .sub-card-value { /* Estilo para valores dentro de tarjetas */
-            @apply text-3xl font-bold;
-        }
-        .small-card-value { /* Estilo para valores en tarjetas pequeñas (grupos, tutoras) */
-            @apply text-2xl font-bold;
-        }
-        .table-header {
-            @apply px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider bg-blue-50 rounded-t-lg;
-        }
-        .table-cell {
-            @apply px-4 py-3 whitespace-nowrap text-sm text-gray-800;
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --info-color: #3b82f6;
         }
 
-        /* Animaciones personalizadas */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
-        .fade-in {
+
+        .metric-card {
+            @apply glass-card p-6 rounded-2xl transform transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer;
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .metric-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .primary-card { border-left-color: #667eea; }
+        .success-card { border-left-color: var(--success-color); }
+        .warning-card { border-left-color: var(--warning-color); }
+        .error-card { border-left-color: var(--error-color); }
+        .info-card { border-left-color: var(--info-color); }
+
+        .metric-title {
+            @apply text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2;
+        }
+
+        .metric-value {
+            @apply text-3xl font-bold mb-1;
+        }
+
+        .main-metric-value {
+            @apply text-6xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
+            text-shadow: 0 0 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .status-badge {
+            @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold transition-all duration-300;
+        }
+
+        .status-active {
+            @apply bg-green-100 text-green-800 border border-green-200;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .status-inactive {
+            @apply bg-yellow-100 text-yellow-800 border border-yellow-200;
+            animation: pulse 2s infinite;
+        }
+
+        .status-error {
+            @apply bg-red-100 text-red-800 border border-red-200;
+        }
+
+        .status-server-error {
+            @apply bg-purple-100 text-purple-800 border border-purple-200;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .animate-slide-in {
+            animation: slideInUp 0.8s ease-out forwards;
+        }
+
+        .animate-fade-in {
             animation: fadeIn 0.6s ease-out forwards;
         }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        .animate-pulse {
-            animation: pulse 1.5s infinite ease-in-out;
+
+        .loading-spinner {
+            @apply inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full;
+            animation: spin 1s linear infinite;
         }
 
-        /* Estilos para el indicador de estado de conexión */
-        #connectionStatus {
-            @apply px-3 py-1 rounded-full text-sm font-medium;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-        .status-active {
-            @apply bg-green-200 text-green-800;
+
+        .data-table {
+            @apply w-full divide-y divide-gray-200 rounded-xl overflow-hidden shadow-lg;
+            background: rgba(255, 255, 255, 0.95);
         }
-        .status-inactive {
-            @apply bg-red-200 text-red-800;
+
+        .table-header {
+            @apply px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider bg-gradient-to-r from-gray-50 to-gray-100;
         }
-        .status-error {
-            @apply bg-yellow-200 text-yellow-800;
+
+        .table-row {
+            @apply hover:bg-blue-50 transition-all duration-200 cursor-pointer;
+        }
+
+        .table-cell {
+            @apply px-6 py-4 whitespace-nowrap text-sm text-gray-800;
+        }
+
+        .icon-badge {
+            @apply w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold;
+        }
+
+        .section-header {
+            @apply text-2xl font-bold text-gray-800 mb-6 flex items-center;
+        }
+
+        .section-header::before {
+            content: '';
+            @apply w-1 h-8 bg-gradient-to-b from-blue-500 to-purple-600 rounded-full mr-3;
+        }
+
+        .progress-bar {
+            @apply w-full bg-gray-200 rounded-full h-2 overflow-hidden;
+        }
+
+        .progress-fill {
+            @apply h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-1000 ease-out;
+        }
+
+        .floating-btn {
+            @apply fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full shadow-2xl flex items-center justify-center text-xl transition-all duration-300 hover:scale-110 z-50;
+        }
+
+        .notification {
+            @apply fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            @apply bg-green-100 text-green-800 border border-green-200;
+        }
+
+        .notification.error {
+            @apply bg-red-100 text-red-800 border border-red-200;
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-blue-100 to-indigo-200 font-sans leading-normal tracking-normal text-gray-900">
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-100 to-purple-100">
+    <!-- Notification Container -->
+    <div id="notifications"></div>
 
-    <header class="bg-gradient-to-r from-blue-700 to-indigo-700 text-white p-6 md:p-8 shadow-xl">
-        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">📊 Dashboard de Participantes</h1>
-            <div class="flex items-center space-x-4">
-                <span id="connectionStatus" class="status-inactive">Inactivo</span>
-                <button id="refreshDataBtn" class="bg-blue-900 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg">
-                    Actualizar Datos 🔄
-                </button>
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 text-white shadow-2xl">
+        <div class="container mx-auto px-6 py-8">
+            <div class="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-chart-bar text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-black tracking-tight">Dashboard Participantes</h1>
+                        <p class="text-blue-200 text-sm font-medium">Sistema de Gestión Avanzado</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div id="lastUpdate" class="text-blue-200 text-sm"></div>
+                    <div id="connectionStatus" class="status-badge status-inactive">
+                        <i class="fas fa-spinner fa-spin mr-2"></i>
+                        Inicializando...
+                    </div>
+                    <button id="refreshBtn" class="bg-white bg-opacity-20 hover:bg-opacity-30 px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center space-x-2">
+                        <i id="refreshIcon" class="fas fa-sync-alt"></i>
+                        <span>Actualizar</span>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
 
-    <main class="container mx-auto p-6 md:p-10 space-y-10">
-
-        <section class="card fade-in" style="animation-delay: 0.1s;">
-            <h2 class="card-title text-center">🌟 Panorama de Participantes 🌟</h2>
-            <div class="flex flex-col items-center mb-6">
-                <p class="text-lg font-semibold text-gray-600">Total de Participantes en Nuestra Comunidad:</p>
-                <p id="totalParticipants" class="main-card-value">0</p>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-                <div class="p-4 bg-blue-50 rounded-lg shadow-sm">
-                    <p class="text-md font-medium text-gray-700">Niños 👦</p>
-                    <p id="totalBoys" class="sub-card-value text-green-600">0</p>
-                </div>
-                <div class="p-4 bg-pink-50 rounded-lg shadow-sm">
-                    <p class="text-md font-medium text-gray-700">Niñas 👧</p>
-                    <p id="totalGirls" class="sub-card-value text-pink-600">0</p>
-                </div>
-                <div class="p-4 bg-yellow-50 rounded-lg shadow-sm">
-                    <p class="text-md font-medium text-gray-700">Sin Fecha Nac. (Posible Sin Nacer) 🐣</p>
-                    <p id="notBorn" class="sub-card-value text-yellow-600">0</p>
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-10 space-y-10">
+        
+        <!-- Resumen General -->
+        <section class="animate-slide-in" style="animation-delay: 0.1s;">
+            <h2 class="section-header">
+                <i class="fas fa-users text-blue-600 mr-3"></i>
+                Resumen General
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                <!-- Total Participantes -->
+                <div class="metric-card primary-card lg:col-span-3 text-center">
+                    <div class="metric-title">Total de Participantes</div>
+                    <div id="totalParticipants" class="main-metric-value">0</div>
+                    <div class="progress-bar mt-4">
+                        <div id="totalProgress" class="progress-fill" style="width: 0%"></div>
+                    </div>
                 </div>
             </div>
-        </section>
 
-        <section class="card fade-in" style="animation-delay: 0.3s;">
-            <h2 class="card-title">📚 Nivel Educativo: ¡Formando Futuros!</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-                <div class="p-4 bg-red-50 rounded-lg shadow-sm">
-                    <p class="text-md font-medium text-gray-700">No Estudiando 🚫</p>
-                    <p id="notStudying" class="small-card-value text-red-600">0</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Niños -->
+                <div class="metric-card info-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="metric-title">Niños</div>
+                            <div id="totalBoys" class="metric-value text-blue-600">0</div>
+                        </div>
+                        <div class="icon-badge bg-blue-500">
+                            <i class="fas fa-child"></i>
+                        </div>
+                    </div>
+                    <div id="boysProgress" class="progress-bar mt-3">
+                        <div class="progress-fill bg-blue-500" style="width: 0%"></div>
+                    </div>
                 </div>
-                <div class="p-4 bg-blue-50 rounded-lg shadow-sm">
-                    <p class="text-md font-medium text-gray-700">En Primaria 📝</p>
-                    <p id="inPrimary" class="small-card-value text-blue-600">0</p>
-                </div>
-                <div class="p-4 bg-green-50 rounded-lg shadow-sm">
-                    <p class="text-md font-medium text-gray-700">En Bachiller 🧑‍🎓</p>
-                    <p id="inHighSchool" class="small-card-value text-green-600">0</p>
-                </div>
-                <div class="p-4 bg-purple-50 rounded-lg shadow-sm">
-                    <p class="text-md font-medium text-gray-700">Educación Superior 🎓</p>
-                    <p id="higherEducation" class="small-card-value text-purple-600">0</p>
-                </div>
-            </div>
-        </section>
 
-        <section class="card fade-in" style="animation-delay: 0.5s;">
-            <h2 class="card-title">👶 Grupos por Edad: ¡Cada Etapa Cuenta!</h2>
-            <div id="ageGroupCharts" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                <!-- Niñas -->
+                <div class="metric-card success-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="metric-title">Niñas</div>
+                            <div id="totalGirls" class="metric-value text-pink-600">0</div>
+                        </div>
+                        <div class="icon-badge bg-pink-500">
+                            <i class="fas fa-female"></i>
+                        </div>
+                    </div>
+                    <div id="girlsProgress" class="progress-bar mt-3">
+                        <div class="progress-fill bg-pink-500" style="width: 0%"></div>
+                    </div>
                 </div>
-        </section>
 
-        <section class="card fade-in" style="animation-delay: 0.7s;">
-            <h2 class="card-title">👩‍🏫 Conteo por Tutoras: ¡Nuestros Guías!</h2>
-            <div id="tutorCountCharts" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- No Nacidos -->
+                <div class="metric-card warning-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="metric-title">Por Nacer</div>
+                            <div id="notBorn" class="metric-value text-yellow-600">0</div>
+                        </div>
+                        <div class="icon-badge bg-yellow-500">
+                            <i class="fas fa-baby"></i>
+                        </div>
+                    </div>
+                    <div id="notBornProgress" class="progress-bar mt-3">
+                        <div class="progress-fill bg-yellow-500" style="width: 0%"></div>
+                    </div>
                 </div>
-        </section>
-
-        <section class="card fade-in" style="animation-delay: 0.9s;">
-            <h2 class="card-title">🗓️ Actividades de la Semana: ¡Agenda al Día!</h2>
-            <div id="weeklyActivities" class="overflow-x-auto rounded-lg shadow-inner">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-blue-100">
-                        <tr>
-                            <th class="table-header rounded-tl-lg">Fecha</th>
-                            <th class="table-header">Actividad</th>
-                            <th class="table-header rounded-tr-lg">Descripción</th>
-                        </tr>
-                    </thead>
-                    <tbody id="activitiesTableBody" class="bg-white divide-y divide-gray-200">
-                        </tbody>
-                </table>
-                <p id="noActivitiesMessage" class="text-center text-gray-500 mt-4 text-lg p-4 hidden">
-                    ¡Parece que no hay actividades programadas para esta semana! 🎉 Tiempo para crear nuevas aventuras.
-                </p>
             </div>
         </section>
 
+        <!-- Nivel Educativo -->
+        <section class="animate-slide-in" style="animation-delay: 0.3s;">
+            <h2 class="section-header">
+                <i class="fas fa-graduation-cap text-green-600 mr-3"></i>
+                Nivel Educativo
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                <!-- No Estudiando -->
+                <div class="metric-card error-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="metric-title">Sin Estudios</div>
+                            <div id="notStudying" class="metric-value text-red-600">0</div>
+                        </div>
+                        <div class="icon-badge bg-red-500">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Primaria -->
+                <div class="metric-card info-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="metric-title">Primaria</div>
+                            <div id="inPrimary" class="metric-value text-blue-600">0</div>
+                        </div>
+                        <div class="icon-badge bg-blue-500">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bachillerato -->
+                <div class="metric-card success-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="metric-title">Bachillerato</div>
+                            <div id="inHighSchool" class="metric-value text-green-600">0</div>
+                        </div>
+                        <div class="icon-badge bg-green-500">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Técnico -->
+                <div class="metric-card warning-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="metric-title">Técnico</div>
+                            <div id="technical" class="metric-value text-orange-600">0</div>
+                        </div>
+                        <div class="icon-badge bg-orange-500">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Universidad -->
+                <div class="metric-card primary-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="metric-title">Universidad</div>
+                            <div id="university" class="metric-value text-purple-600">0</div>
+                        </div>
+                        <div class="icon-badge bg-purple-500">
+                            <i class="fas fa-university"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grupos por Edad -->
+        <section class="animate-slide-in" style="animation-delay: 0.5s;">
+            <h2 class="section-header">
+                <i class="fas fa-layer-group text-purple-600 mr-3"></i>
+                Grupos por Edad
+            </h2>
+            <div id="ageGroupCards" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"></div>
+        </section>
+
+        <!-- Tutoras -->
+        <section class="animate-slide-in" style="animation-delay: 0.7s;">
+            <h2 class="section-header">
+                <i class="fas fa-chalkboard-teacher text-indigo-600 mr-3"></i>
+                Distribución por Tutoras
+            </h2>
+            <div id="tutorCards" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+        </section>
+
+        <!-- Actividades de la Semana -->
+        <section class="animate-slide-in" style="animation-delay: 0.9s;">
+            <h2 class="section-header">
+                <i class="fas fa-calendar-week text-teal-600 mr-3"></i>
+                Actividades de la Semana
+            </h2>
+            
+            <div class="glass-card rounded-2xl overflow-hidden">
+                <div id="activitiesContent">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th class="table-header">
+                                    <i class="fas fa-calendar mr-2"></i>Fecha
+                                </th>
+                                <th class="table-header">
+                                    <i class="fas fa-star mr-2"></i>Actividad
+                                </th>
+                                <th class="table-header">
+                                    <i class="fas fa-info-circle mr-2"></i>Descripción
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="activitiesTableBody"></tbody>
+                    </table>
+                    <div id="noActivitiesMessage" class="hidden text-center py-12">
+                        <div class="text-6xl mb-4">📅</div>
+                        <h3 class="text-xl font-semibold text-gray-600 mb-2">No hay actividades programadas</h3>
+                        <p class="text-gray-500">¡Tiempo perfecto para planificar nuevas aventuras!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
+    <!-- Floating Action Button -->
+    <button id="floatingRefresh" class="floating-btn">
+        <i class="fas fa-sync-alt"></i>
+    </button>
+
     <script>
-document.addEventListener('DOMContentLoaded', () => {
-    // ¡TU URL DE GOOGLE APPS SCRIPT DESPLEGADO!
-    const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4weug7FGWiujFzaNMShwTg7Y-gNi9EEDL_ow2Vmw_lm8rAUdIIqWGbkQHLtPmsdMV/exec";
+        class ParticipantsDashboard {
+            constructor() {
+                this.GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4weug7FGWiujFzaNMShwTg7Y-gNi9EEDL_ow2Vmw_lm8rAUdIIqWGbkQHLtPmsdMV/exec";
+                this.isLoading = false;
+                this.lastUpdate = null;
+                this.retryCount = 0;
+                this.maxRetries = 3;
+                
+                this.initializeEventListeners();
+                this.loadData();
+                this.startAutoRefresh();
+            }
 
-    const refreshDataBtn = document.getElementById('refreshDataBtn');
-    const connectionStatusSpan = document.getElementById('connectionStatus');
+            initializeEventListeners() {
+                document.getElementById('refreshBtn').addEventListener('click', () => this.loadData(true));
+                document.getElementById('floatingRefresh').addEventListener('click', () => this.loadData(true));
+            }
 
-    // Función para actualizar el estado de la conexión visualmente
-    function setConnectionStatus(status) {
-        connectionStatusSpan.classList.remove('status-active', 'status-inactive', 'status-error');
-        if (status === 'active') {
-            connectionStatusSpan.textContent = 'Activo ✅';
-            connectionStatusSpan.classList.add('status-active');
-        } else if (status === 'inactive') {
-            connectionStatusSpan.textContent = 'Cargando... 💤';
-            connectionStatusSpan.classList.add('status-inactive');
-        } else if (status === 'error') {
-            connectionStatusSpan.textContent = 'Error (Conexión/Datos) ❌';
-            connectionStatusSpan.classList.add('status-error');
-        }
-    }
+            startAutoRefresh() {
+                // Auto-refresh cada 5 minutos
+                setInterval(() => {
+                    if (!this.isLoading) {
+                        this.loadData();
+                    }
+                }, 300000);
+            }
 
-    // Cargar datos al inicio y aplicar animaciones
-    fetchData();
+            setConnectionStatus(status, message = '') {
+                const statusElement = document.getElementById('connectionStatus');
+                const iconClasses = {
+                    active: 'fas fa-check-circle',
+                    inactive: 'fas fa-spinner fa-spin',
+                    error: 'fas fa-exclamation-triangle',
+                    server_error: 'fas fa-server'
+                };
 
-    // Recargar datos al hacer clic en el botón
-    refreshDataBtn.addEventListener('click', fetchData);
+                const statusMessages = {
+                    active: 'Conectado',
+                    inactive: 'Cargando...',
+                    error: 'Error de Conexión',
+                    server_error: 'Error del Servidor (404)'
+                };
 
-    async function fetchData() {
-        setConnectionStatus('inactive'); // Indicar que se está cargando
+                statusElement.className = `status-badge status-${status === 'server_error' ? 'server-error' : status}`;
+                statusElement.innerHTML = `
+                    <i class="${iconClasses[status]} mr-2"></i>
+                    ${message || statusMessages[status]}
+                `;
+            }
 
-        try {
-            // Ya no extraemos el ID de la hoja, la URL de Apps Script es el endpoint directo
-            const appsScriptBaseUrl = GOOGLE_APPS_SCRIPT_URL;
+            showNotification(message, type = 'success') {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
 
-            // Solicitar datos de las hojas "Participantes" y "Actividades"
-            const [participantsResponse, activitiesResponse] = await Promise.all([
-                fetch(`${appsScriptBaseUrl}?sheet=Participantes`),
-                fetch(`${appsScriptBaseUrl}?sheet=Actividades`)
-            ]);
+                document.getElementById('notifications').appendChild(notification);
+                
+                setTimeout(() => notification.classList.add('show'), 100);
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => notification.remove(), 300);
+                }, 4000);
+            }
 
-            // Verificar si las respuestas son exitosas (status 200 OK)
-            if (!participantsResponse.ok || !activitiesResponse.ok) {
-                let errorMessage = 'Error al obtener datos del Apps Script.';
-                if (participantsResponse.status === 404 || activitiesResponse.status === 404) {
-                    errorMessage = 'Error 404: Asegúrate de que los nombres de las hojas (Participantes, Actividades) sean correctos en tu Google Sheet.';
+            updateLastUpdate() {
+                this.lastUpdate = new Date();
+                document.getElementById('lastUpdate').textContent = 
+                    `Última actualización: ${this.lastUpdate.toLocaleTimeString()}`;
+            }
+
+            setLoadingState(loading) {
+                this.isLoading = loading;
+                const refreshBtn = document.getElementById('refreshBtn');
+                const refreshIcon = document.getElementById('refreshIcon');
+                const floatingBtn = document.getElementById('floatingRefresh');
+
+                if (loading) {
+                    refreshIcon.className = 'fas fa-spinner fa-spin';
+                    refreshBtn.disabled = true;
+                    floatingBtn.style.opacity = '0.6';
+                    this.setConnectionStatus('inactive');
+                } else {
+                    refreshIcon.className = 'fas fa-sync-alt';
+                    refreshBtn.disabled = false;
+                    floatingBtn.style.opacity = '1';
                 }
-                throw new Error(errorMessage);
             }
 
-            // Apps Script ya devuelve JSON, no necesitamos parsear CSV
-            const participants = await participantsResponse.json();
-            const activities = await activitiesResponse.json();
+            async loadData(manual = false) {
+                if (this.isLoading) return;
 
-            // Si Apps Script devuelve un error (por ejemplo, hoja no encontrada)
-            if (participants.error || activities.error) {
-                throw new Error(participants.error || activities.error);
+                this.setLoadingState(true);
+
+                try {
+                    const [participantsResponse, activitiesResponse] = await Promise.all([
+                        fetch(`${this.GOOGLE_APPS_SCRIPT_URL}?sheet=Participantes`),
+                        fetch(`${this.GOOGLE_APPS_SCRIPT_URL}?sheet=Actividades`)
+                    ]);
+
+                    // Manejo específico de errores
+                    if (participantsResponse.status === 404 || activitiesResponse.status === 404) {
+                        throw new Error('SERVER_404');
+                    }
+
+                    if (!participantsResponse.ok || !activitiesResponse.ok) {
+                        throw new Error('FETCH_ERROR');
+                    }
+
+                    const participants = await participantsResponse.json();
+                    const activities = await activitiesResponse.json();
+
+                    if (participants.error || activities.error) {
+                        throw new Error('DATA_ERROR');
+                    }
+
+                    this.processData(participants, activities);
+                    this.setConnectionStatus('active');
+                    this.updateLastUpdate();
+                    this.retryCount = 0;
+
+                    if (manual) {
+                        this.showNotification('Datos actualizados correctamente', 'success');
+                    }
+
+                } catch (error) {
+                    this.handleError(error, manual);
+                } finally {
+                    this.setLoadingState(false);
+                }
             }
 
-            // Procesar y mostrar los datos
-            processParticipantsData(participants);
-            displayWeeklyActivities(activities);
-            setConnectionStatus('active'); // Indicar que la conexión es exitosa
+            handleError(error, manual) {
+                this.retryCount++;
 
-            // Aplicar animaciones después de cargar los datos
-            document.querySelectorAll('.fade-in').forEach((el, index) => {
-                el.style.animationDelay = `${index * 0.15}s`;
-                el.classList.add('animate-fadeIn');
-            });
+                if (error.message === 'SERVER_404') {
+                    this.setConnectionStatus('server_error');
+                    if (manual) {
+                        this.showNotification('Error 404: Servidor no encontrado', 'error');
+                    }
+                } else if (!navigator.onLine) {
+                    this.setConnectionStatus('error', 'Sin conexión a internet');
+                    if (manual) {
+                        this.showNotification('Sin conexión a internet', 'error');
+                    }
+                } else {
+                    this.setConnectionStatus('error');
+                    if (manual) {
+                        this.showNotification('Error al cargar los datos', 'error');
+                    }
+                }
 
-        } catch (error) {
-            console.error('Error al cargar los datos:', error);
-            // Determinar el tipo de error para un mensaje más útil al usuario
-            if (!navigator.onLine) {
-                 setConnectionStatus('error'); // No hay conexión a Internet
-                 alert('¡Sin conexión a Internet! Por favor, verifica tu conexión.');
-            } else if (error.message.includes('Failed to fetch')) {
-                 setConnectionStatus('error'); // Posiblemente CORS o URL incorrecta de Apps Script
-                 alert('Error de red al intentar conectar. Asegúrate de que la URL de Apps Script sea correcta y esté publicada con acceso "Cualquier usuario".');
-            } else {
-                 setConnectionStatus('error'); // Otros errores (del script, hoja vacía, etc.)
-                 alert(`Hubo un error al cargar los datos: ${error.message}. Revisa los nombres de las columnas y el estado de la aplicación web.`);
-            }
-        }
-    }
-
-    // Esta función ya no es necesaria porque Apps Script devuelve JSON directamente
-    // function parseCSV(csvText) { ... }
-
-    function processParticipantsData(participants) {
-        const totalParticipants = participants.length;
-        let totalGirls = 0;
-        let totalBoys = 0;
-        let notBorn = 0; // Para participantes sin fecha de nacimiento (o no registrados)
-
-        // Contadores para niveles educativos
-        let notStudying = 0;
-        let inPrimary = 0;
-        let inHighSchool = 0;
-        let higherEducation = 0; // Incluye Técnico, Tecnólogo, Universidad
-
-        // Grupos de edad específicos
-        const ageGroups = {
-            'SUPERVIVENCIA (0-1)': 0,
-            'CAMINADORES (1-2)': 0,
-            'EXPLORADORES (3-5)': 0,
-            'SEMILLAS (6-8)': 0,
-            'VENCEDORES (9-11)': 0,
-            'VISIONARIOS (12-14)': 0,
-            'GENERACIÓN EX. (15-18)': 0,
-            'JÓVENES (19+)': 0
-        };
-
-        const tutorCounts = {}; // Para el conteo por tutoras
-
-        participants.forEach(p => {
-            // Contar por sexo
-            if (p.SEXO && p.SEXO.toUpperCase() === 'FEMENINO') {
-                totalGirls++;
-            } else if (p.SEXO && p.SEXO.toUpperCase() === 'MASCULINO') {
-                totalBoys++;
+                // Auto-retry logic
+                if (this.retryCount < this.maxRetries && !manual) {
+                    setTimeout(() => this.loadData(), 5000 * this.retryCount);
+                }
             }
 
-            // Lógica para niveles educativos (¡Mejorada según tus indicaciones!)
-            const gradoEscolar = p['GRADO ESCOLAR'] ? p['GRADO ESCOLAR'].toUpperCase().trim() : '';
-            const tecnico = p.TECNICO ? p.TECNICO.toUpperCase().trim() : '';
-
-            let educationAssigned = false; // Bandera para asegurar que solo se asigne a una categoría
-
-            // Prioridad 1: Universidad (incluso si también tiene Técnico)
-            if (gradoEscolar.includes('UNIVERSIDAD')) {
-                higherEducation++;
-                educationAssigned = true;
-            }
-            // Prioridad 2: Técnico (si no es Universidad y tiene valor en 'TECNICO' y no es un guion)
-            else if (tecnico !== '' && tecnico !== '-') {
-                higherEducation++;
-                educationAssigned = true;
-            }
-            // Prioridad 3: Bachiller/Secundaria
-            else if (gradoEscolar.includes('SECUNDARIA') || gradoEscolar.includes('BACHILLER')) {
-                inHighSchool++;
-                educationAssigned = true;
-            }
-            // Prioridad 4: Primaria/Preparatoria
-            else if (gradoEscolar.includes('PRIMARIA') || gradoEscolar.includes('PREPARATORIA')) {
-                inPrimary++;
-                educationAssigned = true;
+            processData(participants, activities) {
+                this.processParticipants(participants);
+                this.processActivities(activities);
+                this.animateCounters();
             }
 
-            // Si no se asignó a ninguna categoría de estudio y el grado escolar es "No Inscrito" o vacío o un guion
-            if (!educationAssigned && (gradoEscolar.includes('No Inscrito') || gradoEscolar === '' || gradoEscolar === '-')) {
-                notStudying++;
+            processParticipants(participants) {
+                const stats = this.calculateStats(participants);
+                this.updateGeneralStats(stats);
+                this.updateEducationStats(stats);
+                this.updateAgeGroups(stats.ageGroups);
+                this.updateTutorCards(stats.tutorCounts);
             }
 
+            calculateStats(participants) {
+                const stats = {
+                    total: participants.length,
+                    boys: 0,
+                    girls: 0,
+                    notBorn: 0,
+                    notStudying: 0,
+                    inPrimary: 0,
+                    inHighSchool: 0,
+                    technical: 0,
+                    university: 0,
+                    ageGroups: {
+                        'SUPERVIVENCIA (0-1)': 0,
+                        'CAMINADORES (1-2)': 0,
+                        'EXPLORADORES (3-5)': 0,
+                        'SEMILLAS (6-8)': 0,
+                        'VENCEDORES (9-11)': 0,
+                        'VISIONARIOS (12-14)': 0,
+                        'GENERACIÓN EX. (15-18)': 0,
+                        'JÓVENES (19+)': 0
+                    },
+                    tutorCounts: {}
+                };
 
-            // Calcular edad y agrupar por edad
-            if (p['FECHA NACIMIENTO']) {
-                const birthDate = new Date(p['FECHA NACIMIENTO']);
-                const today = new Date(); // Fecha actual del usuario
+                participants.forEach(participant => {
+                    this.processSex(participant, stats);
+                    this.processEducation(participant, stats);
+                    this.processAge(participant, stats);
+                    this.processTutor(participant, stats);
+                });
+
+                return stats;
+            }
+
+            processSex(participant, stats) {
+                const sex = participant.SEXO ? participant.SEXO.toUpperCase().trim() : '';
+                
+                if (sex === '-' || sex === '' || !participant['FECHA NACIMIENTO']) {
+                    stats.notBorn++;
+                } else if (sex === 'FEMENINO' || sex === 'F') {
+                    stats.girls++;
+                } else if (sex === 'MASCULINO' || sex === 'M') {
+                    stats.boys++;
+                }
+            }
+
+            processEducation(participant, stats) {
+                const grado = (participant['GRADO ESCOLAR'] || '').toUpperCase().trim();
+                const tecnico = (participant.TECNICO || '').toUpperCase().trim();
+
+                // Prioridad 1: Universidad (siempre gana sobre técnico)
+                if (grado.includes('UNIVERSIDAD')) {
+                    stats.university++;
+                    return;
+                }
+
+                // Prioridad 2: Técnico (solo si no hay universidad)
+                if (tecnico && tecnico !== '-' && tecnico !== '') {
+                    stats.technical++;
+                    return;
+                }
+
+                // Prioridad 3: Bachillerato/Secundaria
+                if (grado.includes('BACHILLER') || grado.includes('SECUNDARIA')) {
+                    stats.inHighSchool++;
+                    return;
+                }
+
+                // Prioridad 4: Primaria
+                if (grado.includes('PRIMARIA') || grado.includes('PREPARATORIA')) {
+                    stats.inPrimary++;
+                    return;
+                }
+
+                // Si no está en ninguna categoría o está marcado como "No Inscrito"
+                if (grado.includes('NO INSCRITO') || grado === '' || grado === '-') {
+                    stats.notStudying++;
+                }
+            }
+
+            processAge(participant, stats) {
+                if (!participant['FECHA NACIMIENTO']) return;
+
+                const birthDate = new Date(participant['FECHA NACIMIENTO']);
+                if (isNaN(birthDate)) return;
+
+                const today = new Date();
                 let age = today.getFullYear() - birthDate.getFullYear();
-                const m = today.getMonth() - birthDate.getMonth();
-                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                const monthDiff = today.getMonth() - birthDate.getMonth();
+                
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
                     age--;
                 }
 
-                if (age >= 0 && age <= 1) {
-                    ageGroups['SUPERVIVENCIA (0-1)']++;
-                } else if (age > 1 && age <= 2) {
-                    ageGroups['CAMINADORES (1-2)']++;
-                } else if (age > 2 && age <= 5) {
-                    ageGroups['EXPLORADORES (3-5)']++;
-                } else if (age > 5 && age <= 8) {
-                    ageGroups['SEMILLAS (6-8)']++;
-                } else if (age > 8 && age <= 11) {
-                    ageGroups['VENCEDORES (9-11)']++;
-                } else if (age > 11 && age <= 14) {
-                    ageGroups['VISIONARIOS (12-14)']++;
-                } else if (age > 14 && age <= 18) {
-                    ageGroups['GENERACIÓN EX. (15-18)']++;
-                } else if (age >= 19) {
-                    ageGroups['JÓVENES (19+)']++;
-                }
-            } else {
-                notBorn++; // Incrementa si no hay fecha de nacimiento
+                if (age >= 0 && age <= 1) stats.ageGroups['SUPERVIVENCIA (0-1)']++;
+                else if (age > 1 && age <= 2) stats.ageGroups['CAMINADORES (1-2)']++;
+                else if (age > 2 && age <= 5) stats.ageGroups['EXPLORADORES (3-5)']++;
+                else if (age > 5 && age <= 8) stats.ageGroups['SEMILLAS (6-8)']++;
+                else if (age > 8 && age <= 11) stats.ageGroups['VENCEDORES (9-11)']++;
+                else if (age > 11 && age <= 14) stats.ageGroups['VISIONARIOS (12-14)']++;
+                else if (age > 14 && age <= 18) stats.ageGroups['GENERACIÓN EX. (15-18)']++;
+                else if (age >= 19) stats.ageGroups['JÓVENES (19+)']++;
             }
 
-            // Conteo por tutoras
-            const tutora = p.TUTORA ? p.TUTORA.trim() : 'Sin Asignar';
-            tutorCounts[tutora] = (tutorCounts[tutora] || 0) + 1;
-        });
+            processTutor(participant, stats) {
+                const tutor = participant.TUTORA ? participant.TUTORA.trim() : 'Sin Asignar';
+                stats.tutorCounts[tutor] = (stats.tutorCounts[tutor] || 0) + 1;
+            }
 
-        // Actualizar el DOM: Sección 1 - Panorama General
-        document.getElementById('totalParticipants').textContent = totalParticipants;
-        document.getElementById('totalGirls').textContent = totalGirls;
-        document.getElementById('totalBoys').textContent = totalBoys;
-        document.getElementById('notBorn').textContent = notBorn;
+            updateGeneralStats(stats) {
+                document.getElementById('totalParticipants').textContent = stats.total;
+                document.getElementById('totalBoys').textContent = stats.boys;
+                document.getElementById('totalGirls').textContent = stats.girls;
+                document.getElementById('notBorn').textContent = stats.notBorn;
 
-        // Actualizar el DOM: Sección 2 - Nivel Educativo
-        document.getElementById('notStudying').textContent = notStudying;
-        document.getElementById('inPrimary').textContent = inPrimary;
-        document.getElementById('inHighSchool').textContent = inHighSchool;
-        document.getElementById('higherEducation').textContent = higherEducation;
+                // Update progress bars
+                if (stats.total > 0) {
+                    const boysPercent = (stats.boys / stats.total) * 100;
+                    const girlsPercent = (stats.girls / stats.total) * 100;
+                    const notBornPercent = (stats.notBorn / stats.total) * 100;
 
-        // Generar tarjetas para grupos de edad (Sección 3)
-        const ageGroupChartsDiv = document.getElementById('ageGroupCharts');
-        ageGroupChartsDiv.innerHTML = ''; // Limpiar antes de añadir
-        Object.entries(ageGroups).forEach(([groupName, count]) => {
-            const card = document.createElement('div');
-            card.className = 'card bg-purple-100 border-l-4 border-purple-500 text-center p-3 animate-fadeIn';
-            card.innerHTML = `<h3 class="text-md font-semibold text-purple-700">${groupName}</h3><p class="small-card-value text-purple-600">${count}</p>`;
-            ageGroupChartsDiv.appendChild(card);
-        });
+                    setTimeout(() => {
+                        document.querySelector('#boysProgress .progress-fill').style.width = `${boysPercent}%`;
+                        document.querySelector('#girlsProgress .progress-fill').style.width = `${girlsPercent}%`;
+                        document.querySelector('#notBornProgress .progress-fill').style.width = `${notBornPercent}%`;
+                        document.querySelector('#totalProgress').style.width = '100%';
+                    }, 500);
+                }
+            }
 
-        // Generar tarjetas para el conteo por tutoras (Sección 4)
-        const tutorCountChartsDiv = document.getElementById('tutorCountCharts');
-        tutorCountChartsDiv.innerHTML = ''; // Limpiar antes de añadir
-        Object.entries(tutorCounts).forEach(([tutoraName, count]) => {
-            const card = document.createElement('div');
-            card.className = 'card bg-teal-100 border-l-4 border-teal-500 text-center p-3 animate-fadeIn';
-            card.innerHTML = `<h3 class="text-md font-semibold text-teal-700">${tutoraName}</h3><p class="small-card-value text-teal-600">${count}</p>`;
-            tutorCountChartsDiv.appendChild(card);
-        });
-    }
+            updateEducationStats(stats) {
+                document.getElementById('notStudying').textContent = stats.notStudying;
+                document.getElementById('inPrimary').textContent = stats.inPrimary;
+                document.getElementById('inHighSchool').textContent = stats.inHighSchool;
+                document.getElementById('technical').textContent = stats.technical;
+                document.getElementById('university').textContent = stats.university;
+            }
 
-    function displayWeeklyActivities(activities) {
-        const activitiesTableBody = document.getElementById('activitiesTableBody');
-        const noActivitiesMessage = document.getElementById('noActivitiesMessage');
-        activitiesTableBody.innerHTML = ''; // Limpiar antes de añadir
+            updateAgeGroups(ageGroups) {
+                const container = document.getElementById('ageGroupCards');
+                container.innerHTML = '';
 
-        const today = new Date();
-        // Ajustamos para que la semana empiece en LUNES para la mayoría de contextos latinos
-        // getDay() devuelve 0 para domingo, 1 para lunes...
-        const dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
-        // Si es domingo (0), queremos ir 6 días hacia atrás para el lunes pasado. Si es otro día, vamos (dia-1) días atrás.
-        const diff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+                const colors = [
+                    'from-red-400 to-red-600',
+                    'from-orange-400 to-orange-600',
+                    'from-yellow-400 to-yellow-600',
+                    'from-green-400 to-green-600',
+                    'from-blue-400 to-blue-600',
+                    'from-indigo-400 to-indigo-600',
+                    'from-purple-400 to-purple-600',
+                    'from-pink-400 to-pink-600'
+                ];
 
-        const currentWeekStart = new Date(today.getFullYear(), today.getMonth(), diff);
-        currentWeekStart.setHours(0, 0, 0, 0); // Asegurarse de que sea el inicio del día
+                Object.entries(ageGroups).forEach(([groupName, count], index) => {
+                    const card = document.createElement('div');
+                    card.className = 'metric-card primary-card animate-fade-in';
+                    card.style.animationDelay = `${index * 0.1}s`;
+                    
+                    card.innerHTML = `
+                        <div class="text-center">
+                            <div class="w-12 h-12 mx-auto mb-3 bg-gradient-to-br ${colors[index]} rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                ${count}
+                            </div>
+                            <h3 class="metric-title text-center">${groupName}</h3>
+                            <div class="text-lg font-semibold text-gray-700">${count} participantes</div>
+                        </div>
+                    `;
+                    
+                    container.appendChild(card);
+                });
+            }
 
-        const currentWeekEnd = new Date(currentWeekStart.getFullYear(), currentWeekStart.getMonth(), currentWeekStart.getDate() + 6);
-        currentWeekEnd.setHours(23, 59, 59, 999); // Asegurarse de que sea el final del día
+            updateTutorCards(tutorCounts) {
+                const container = document.getElementById('tutorCards');
+                container.innerHTML = '';
 
-        let activitiesFound = false;
+                const colors = [
+                    'from-teal-400 to-teal-600',
+                    'from-cyan-400 to-cyan-600',
+                    'from-sky-400 to-sky-600',
+                    'from-blue-400 to-blue-600',
+                    'from-indigo-400 to-indigo-600',
+                    'from-purple-400 to-purple-600',
+                    'from-fuchsia-400 to-fuchsia-600',
+                    'from-pink-400 to-pink-600',
+                    'from-rose-400 to-rose-600',
+                    'from-red-400 to-red-600'
+                ];
 
-        activities.forEach(activity => {
-            // Asegúrate de que 'Fecha' sea el encabezado correcto en tu hoja de actividades
-            const activityDateStr = activity.Fecha;
-            if (!activityDateStr) return;
+                Object.entries(tutorCounts).forEach(([tutorName, count], index) => {
+                    const card = document.createElement('div');
+                    card.className = 'metric-card success-card animate-fade-in cursor-pointer transform transition-all duration-300 hover:scale-105';
+                    card.style.animationDelay = `${index * 0.1}s`;
+                    
+                    const colorIndex = index % colors.length;
+                    
+                    card.innerHTML = `
+                        <div class="text-center">
+                            <div class="w-14 h-14 mx-auto mb-3 bg-gradient-to-br ${colors[colorIndex]} rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-800 mb-1 text-sm">${tutorName}</h3>
+                            <div class="text-2xl font-bold text-teal-600">${count}</div>
+                            <div class="text-xs text-gray-500">participantes</div>
+                        </div>
+                    `;
+                    
+                    container.appendChild(card);
+                });
+            }
 
-            // Intentar parsear la fecha en formatos comunes (YYYY-MM-DD, MM/DD/YYYY, DD/MM/YYYY)
-            let activityDate;
-            // Prueba YYYY-MM-DD
-            if (activityDateStr.includes('-') && activityDateStr.split('-')[0].length === 4) {
-                activityDate = new Date(activityDateStr);
-            } else { // Intenta MM/DD/YYYY o DD/MM/YYYY
-                const parts = activityDateStr.split('/');
-                if (parts.length === 3) {
-                    const [p1, p2, p3] = parts.map(Number);
-                    // Suponemos MM/DD/YYYY o DD/MM/YYYY. Intentamos primero MM/DD/YYYY que es común en JS
-                    // Y si el primer número es > 12, asumimos DD/MM/YYYY
-                    if (p1 > 12) { // Probable DD/MM/YYYY
-                        activityDate = new Date(p3, p2 - 1, p1);
-                    } else { // Probable MM/DD/YYYY o ambiguo, asumimos MM/DD/YYYY
-                        activityDate = new Date(p3, p1 - 1, p2);
+            processActivities(activities) {
+                const tableBody = document.getElementById('activitiesTableBody');
+                const noActivitiesMsg = document.getElementById('noActivitiesMessage');
+                
+                tableBody.innerHTML = '';
+
+                const currentWeek = this.getCurrentWeekRange();
+                let activitiesFound = false;
+
+                activities.forEach(activity => {
+                    const activityDate = this.parseActivityDate(activity.Fecha);
+                    
+                    if (activityDate && activityDate >= currentWeek.start && activityDate <= currentWeek.end) {
+                        const row = document.createElement('tr');
+                        row.className = 'table-row';
+                        
+                        row.innerHTML = `
+                            <td class="table-cell">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                                    <span class="font-semibold">${this.formatDate(activityDate)}</span>
+                                </div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="font-medium text-gray-900">${activity.Actividad || 'Sin título'}</div>
+                            </td>
+                            <td class="table-cell">
+                                <div class="text-gray-600">${activity.Descripción || 'Sin descripción'}</div>
+                            </td>
+                        `;
+                        
+                        tableBody.appendChild(row);
+                        activitiesFound = true;
+                    }
+                });
+
+                if (activitiesFound) {
+                    noActivitiesMsg.classList.add('hidden');
+                } else {
+                    noActivitiesMsg.classList.remove('hidden');
+                }
+            }
+
+            getCurrentWeekRange() {
+                const today = new Date();
+                const dayOfWeek = today.getDay();
+                const diff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+                
+                const start = new Date(today.getFullYear(), today.getMonth(), diff);
+                start.setHours(0, 0, 0, 0);
+                
+                const end = new Date(start);
+                end.setDate(start.getDate() + 6);
+                end.setHours(23, 59, 59, 999);
+                
+                return { start, end };
+            }
+
+            parseActivityDate(dateStr) {
+                if (!dateStr) return null;
+
+                let date;
+                
+                if (dateStr.includes('-') && dateStr.split('-')[0].length === 4) {
+                    date = new Date(dateStr);
+                } else if (dateStr.includes('/')) {
+                    const parts = dateStr.split('/').map(Number);
+                    if (parts.length === 3) {
+                        const [p1, p2, p3] = parts;
+                        if (p1 > 12) {
+                            date = new Date(p3, p2 - 1, p1);
+                        } else {
+                            date = new Date(p3, p1 - 1, p2);
+                        }
                     }
                 }
+                
+                return date && !isNaN(date) ? date : null;
             }
 
-            if (activityDate && !isNaN(activityDate) && activityDate >= currentWeekStart && activityDate <= currentWeekEnd) {
-                const row = activitiesTableBody.insertRow();
-                row.className = 'hover:bg-blue-50 transition-all duration-200';
-                row.innerHTML = `
-                    <td class="table-cell">${activity.Fecha || 'N/A'}</td>
-                    <td class="table-cell">${activity.Actividad || 'Sin título'}</td>
-                    <td class="table-cell">${activity.Descripción || 'Sin descripción'}</td>
-                `;
-                activitiesFound = true;
+            formatDate(date) {
+                return date.toLocaleDateString('es-ES', {
+                    weekday: 'short',
+                    day: 'numeric',
+                    month: 'short'
+                });
             }
+
+            animateCounters() {
+                const counters = document.querySelectorAll('.metric-value, .main-metric-value');
+                
+                counters.forEach(counter => {
+                    const target = parseInt(counter.textContent);
+                    if (isNaN(target)) return;
+                    
+                    let current = 0;
+                    const increment = target / 30;
+                    const duration = 1000;
+                    const stepTime = duration / 30;
+                    
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            counter.textContent = target;
+                            clearInterval(timer);
+                        } else {
+                            counter.textContent = Math.floor(current);
+                        }
+                    }, stepTime);
+                });
+            }
+        }
+
+        // Initialize Dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            new ParticipantsDashboard();
         });
 
-        if (activitiesFound) {
-            noActivitiesMessage.classList.add('hidden');
-        } else {
-            noActivitiesMessage.classList.remove('hidden');
+        // Service Worker para PWA (opcional)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => {
+                // Service worker no disponible
+            });
         }
-    }
-});
-  </script>
+    </script>
 </body>
 </html>
