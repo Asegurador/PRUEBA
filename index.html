@@ -7,30 +7,213 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --error-color: #ef4444;
-            --info-color: #3b82f6;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+            --glass-gradient: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            --shadow-soft: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-hover: 0 12px 40px rgba(0,0,0,0.15);
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: var(--shadow-soft);
         }
 
-        .metric-card {
-            @apply glass-card p-6 rounded-2xl transform transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer;
-            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-            border-left: 4px solid transparent;
+        .card-modern {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: var(--shadow-soft);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
 
-        .metric-card::before {
+        .card-modern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--primary-gradient);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .card-modern:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .card-modern:hover::before {
+            transform: scaleX(1);
+        }
+
+        .metric-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .metric-circle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(99, 102, 241, 0.6);
+        }
+
+        .hero-number {
+            font-size: 5rem;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            text-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.95);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 32px;
+            background: var(--primary-gradient);
+            border-radius: 2px;
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary-gradient) var(--progress, 0%), rgba(255,255,255,0.1) 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .progress-ring::before {
+            content: '';
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .progress-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        .status-connected { background: #10b981; }
+        .status-loading { background: #f59e0b; }
+        .status-error { background: #ef4444; }
+
+        .age-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .age-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .age-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .tutor-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tutor-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -42,49 +225,107 @@
             transition: transform 0.3s ease;
         }
 
-        .metric-card:hover::before {
+        .tutor-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .tutor-card:hover::before {
             transform: scaleX(1);
         }
 
-        .primary-card { border-left-color: #667eea; }
-        .success-card { border-left-color: var(--success-color); }
-        .warning-card { border-left-color: var(--warning-color); }
-        .error-card { border-left-color: var(--error-color); }
-        .info-card { border-left-color: var(--info-color); }
-
-        .metric-title {
-            @apply text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2;
+        .tutor-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
         }
 
-        .metric-value {
-            @apply text-3xl font-bold mb-1;
+        .activities-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
         }
 
-        .main-metric-value {
-            @apply text-6xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
-            text-shadow: 0 0 30px rgba(102, 126, 234, 0.3);
+        .activity-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
-        .status-badge {
-            @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold transition-all duration-300;
+        .activity-item:hover {
+            background: rgba(99, 102, 241, 0.03);
         }
 
-        .status-active {
-            @apply bg-green-100 text-green-800 border border-green-200;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        .activity-date {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: var(--primary-gradient);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
         }
 
-        .status-inactive {
-            @apply bg-yellow-100 text-yellow-800 border border-yellow-200;
-            animation: pulse 2s infinite;
+        .floating-refresh {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s ease;
+            z-index: 50;
         }
 
-        .status-error {
-            @apply bg-red-100 text-red-800 border border-red-200;
+        .floating-refresh:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(99, 102, 241, 0.6);
         }
 
-        .status-server-error {
-            @apply bg-purple-100 text-purple-800 border border-purple-200;
+        .notification {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            color: white;
+            font-weight: 500;
+            z-index: 60;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
         }
 
         @keyframes slideInUp {
@@ -98,323 +339,194 @@
             }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
         .animate-slide-in {
             animation: slideInUp 0.8s ease-out forwards;
         }
 
-        .animate-fade-in {
-            animation: fadeIn 0.6s ease-out forwards;
+        .container-fluid {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
         }
 
-        .loading-spinner {
-            @apply inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .data-table {
-            @apply w-full divide-y divide-gray-200 rounded-xl overflow-hidden shadow-lg;
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        .table-header {
-            @apply px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider bg-gradient-to-r from-gray-50 to-gray-100;
-        }
-
-        .table-row {
-            @apply hover:bg-blue-50 transition-all duration-200 cursor-pointer;
-        }
-
-        .table-cell {
-            @apply px-6 py-4 whitespace-nowrap text-sm text-gray-800;
-        }
-
-        .icon-badge {
-            @apply w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold;
-        }
-
-        .section-header {
-            @apply text-2xl font-bold text-gray-800 mb-6 flex items-center;
-        }
-
-        .section-header::before {
-            content: '';
-            @apply w-1 h-8 bg-gradient-to-b from-blue-500 to-purple-600 rounded-full mr-3;
-        }
-
-        .progress-bar {
-            @apply w-full bg-gray-200 rounded-full h-2 overflow-hidden;
-        }
-
-        .progress-fill {
-            @apply h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-1000 ease-out;
-        }
-
-        .floating-btn {
-            @apply fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full shadow-2xl flex items-center justify-center text-xl transition-all duration-300 hover:scale-110 z-50;
-        }
-
-        .notification {
-            @apply fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.success {
-            @apply bg-green-100 text-green-800 border border-green-200;
-        }
-
-        .notification.error {
-            @apply bg-red-100 text-red-800 border border-red-200;
+        .header-glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-100 to-purple-100">
+<body>
+    <!-- Floating Shapes Background -->
+    <div class="floating-shapes">
+        <div class="shape" style="width: 80px; height: 80px; left: 10%; animation-delay: -2s;"></div>
+        <div class="shape" style="width: 60px; height: 60px; left: 80%; animation-delay: -8s;"></div>
+        <div class="shape" style="width: 100px; height: 100px; left: 50%; animation-delay: -5s;"></div>
+        <div class="shape" style="width: 40px; height: 40px; left: 30%; animation-delay: -12s;"></div>
+        <div class="shape" style="width: 70px; height: 70px; left: 70%; animation-delay: -3s;"></div>
+    </div>
+
     <!-- Notification Container -->
     <div id="notifications"></div>
 
     <!-- Header -->
-    <header class="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 text-white shadow-2xl">
-        <div class="container mx-auto px-6 py-8">
-            <div class="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
-                <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-chart-bar text-2xl"></i>
+    <header class="relative py-8 mb-8">
+        <div class="container-fluid">
+            <div class="header-glass rounded-3xl p-8">
+                <div class="flex flex-col lg:flex-row justify-between items-center gap-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center">
+                            <i class="fas fa-chart-bar text-3xl text-white"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-4xl font-black text-white tracking-tight">Dashboard Participantes</h1>
+                            <p class="text-blue-100 font-medium opacity-80">Sistema de Gestión Avanzado</p>
+                        </div>
                     </div>
-                    <div>
-                        <h1 class="text-4xl font-black tracking-tight">Dashboard Participantes</h1>
-                        <p class="text-blue-200 text-sm font-medium">Sistema de Gestión Avanzado</p>
+                    
+                    <div class="flex items-center gap-6">
+                        <div id="lastUpdate" class="text-blue-100 text-sm opacity-80"></div>
+                        <div id="connectionStatus" class="flex items-center px-4 py-2 rounded-full bg-white bg-opacity-20 text-white font-medium">
+                            <div class="status-dot status-loading"></div>
+                            Inicializando...
+                        </div>
+                        <button id="refreshBtn" class="bg-white bg-opacity-20 hover:bg-opacity-30 px-6 py-3 rounded-2xl font-semibold text-white transition-all duration-300 transform hover:scale-105 flex items-center gap-2">
+                            <i id="refreshIcon" class="fas fa-sync-alt"></i>
+                            <span>Actualizar</span>
+                        </button>
                     </div>
-                </div>
-                
-                <div class="flex items-center space-x-4">
-                    <div id="lastUpdate" class="text-blue-200 text-sm"></div>
-                    <div id="connectionStatus" class="status-badge status-inactive">
-                        <i class="fas fa-spinner fa-spin mr-2"></i>
-                        Inicializando...
-                    </div>
-                    <button id="refreshBtn" class="bg-white bg-opacity-20 hover:bg-opacity-30 px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center space-x-2">
-                        <i id="refreshIcon" class="fas fa-sync-alt"></i>
-                        <span>Actualizar</span>
-                    </button>
                 </div>
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-6 py-10 space-y-10">
+    <main class="container-fluid space-y-12 pb-20">
         
-        <!-- Resumen General -->
+        <!-- Resumen Principal -->
         <section class="animate-slide-in" style="animation-delay: 0.1s;">
-            <h2 class="section-header">
-                <i class="fas fa-users text-blue-600 mr-3"></i>
+            <h2 class="section-title">
+                <i class="fas fa-users"></i>
                 Resumen General
             </h2>
             
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-                <!-- Total Participantes -->
-                <div class="metric-card primary-card lg:col-span-3 text-center">
-                    <div class="metric-title">Total de Participantes</div>
-                    <div id="totalParticipants" class="main-metric-value">0</div>
-                    <div class="progress-bar mt-4">
-                        <div id="totalProgress" class="progress-fill" style="width: 0%"></div>
+            <!-- Hero Card -->
+            <div class="card-modern p-10 text-center mb-8">
+                <div class="text-lg font-semibold text-gray-600 mb-4 uppercase tracking-wider">Total de Participantes</div>
+                <div id="totalParticipants" class="hero-number mb-6">0</div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <div class="text-center">
+                        <div class="progress-ring mx-auto mb-4" style="--progress: 0%" id="boysRing">
+                            <div class="progress-content">
+                                <div id="totalBoys" class="text-2xl font-bold text-blue-600">0</div>
+                                <div class="text-sm text-gray-500">Niños</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="progress-ring mx-auto mb-4" style="--progress: 0%" id="girlsRing">
+                            <div class="progress-content">
+                                <div id="totalGirls" class="text-2xl font-bold text-pink-600">0</div>
+                                <div class="text-sm text-gray-500">Niñas</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="progress-ring mx-auto mb-4" style="--progress: 0%" id="notBornRing">
+                            <div class="progress-content">
+                                <div id="notBorn" class="text-2xl font-bold text-yellow-600">0</div>
+                                <div class="text-sm text-gray-500">Por Nacer</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Niños -->
-                <div class="metric-card info-card">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <div class="metric-title">Niños</div>
-                            <div id="totalBoys" class="metric-value text-blue-600">0</div>
-                        </div>
-                        <div class="icon-badge bg-blue-500">
-                            <i class="fas fa-child"></i>
-                        </div>
+            <!-- Educación -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="card-modern p-6 text-center">
+                    <div class="metric-circle mx-auto mb-4" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                        <i class="fas fa-times"></i>
                     </div>
-                    <div id="boysProgress" class="progress-bar mt-3">
-                        <div class="progress-fill bg-blue-500" style="width: 0%"></div>
-                    </div>
+                    <div id="notStudying" class="text-2xl font-bold text-red-600 mb-1">0</div>
+                    <div class="text-sm text-gray-600 font-medium">Sin Estudios</div>
                 </div>
 
-                <!-- Niñas -->
-                <div class="metric-card success-card">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <div class="metric-title">Niñas</div>
-                            <div id="totalGirls" class="metric-value text-pink-600">0</div>
-                        </div>
-                        <div class="icon-badge bg-pink-500">
-                            <i class="fas fa-female"></i>
-                        </div>
+                <div class="card-modern p-6 text-center">
+                    <div class="metric-circle mx-auto mb-4" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                        <i class="fas fa-book"></i>
                     </div>
-                    <div id="girlsProgress" class="progress-bar mt-3">
-                        <div class="progress-fill bg-pink-500" style="width: 0%"></div>
-                    </div>
+                    <div id="inPrimary" class="text-2xl font-bold text-blue-600 mb-1">0</div>
+                    <div class="text-sm text-gray-600 font-medium">Primaria</div>
                 </div>
 
-                <!-- No Nacidos -->
-                <div class="metric-card warning-card">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <div class="metric-title">Por Nacer</div>
-                            <div id="notBorn" class="metric-value text-yellow-600">0</div>
-                        </div>
-                        <div class="icon-badge bg-yellow-500">
-                            <i class="fas fa-baby"></i>
-                        </div>
+                <div class="card-modern p-6 text-center">
+                    <div class="metric-circle mx-auto mb-4" style="background: linear-gradient(135deg, #10b981, #059669);">
+                        <i class="fas fa-user-graduate"></i>
                     </div>
-                    <div id="notBornProgress" class="progress-bar mt-3">
-                        <div class="progress-fill bg-yellow-500" style="width: 0%"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Nivel Educativo -->
-        <section class="animate-slide-in" style="animation-delay: 0.3s;">
-            <h2 class="section-header">
-                <i class="fas fa-graduation-cap text-green-600 mr-3"></i>
-                Nivel Educativo
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-                <!-- No Estudiando -->
-                <div class="metric-card error-card">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <div class="metric-title">Sin Estudios</div>
-                            <div id="notStudying" class="metric-value text-red-600">0</div>
-                        </div>
-                        <div class="icon-badge bg-red-500">
-                            <i class="fas fa-times"></i>
-                        </div>
-                    </div>
+                    <div id="inHighSchool" class="text-2xl font-bold text-green-600 mb-1">0</div>
+                    <div class="text-sm text-gray-600 font-medium">Bachillerato</div>
                 </div>
 
-                <!-- Primaria -->
-                <div class="metric-card info-card">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <div class="metric-title">Primaria</div>
-                            <div id="inPrimary" class="metric-value text-blue-600">0</div>
-                        </div>
-                        <div class="icon-badge bg-blue-500">
-                            <i class="fas fa-book"></i>
-                        </div>
+                <div class="card-modern p-6 text-center">
+                    <div class="metric-circle mx-auto mb-4" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                        <i class="fas fa-tools"></i>
                     </div>
+                    <div id="technical" class="text-2xl font-bold text-orange-600 mb-1">0</div>
+                    <div class="text-sm text-gray-600 font-medium">Técnico</div>
                 </div>
 
-                <!-- Bachillerato -->
-                <div class="metric-card success-card">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <div class="metric-title">Bachillerato</div>
-                            <div id="inHighSchool" class="metric-value text-green-600">0</div>
-                        </div>
-                        <div class="icon-badge bg-green-500">
-                            <i class="fas fa-user-graduate"></i>
-                        </div>
+                <div class="card-modern p-6 text-center">
+                    <div class="metric-circle mx-auto mb-4">
+                        <i class="fas fa-university"></i>
                     </div>
-                </div>
-
-                <!-- Técnico -->
-                <div class="metric-card warning-card">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <div class="metric-title">Técnico</div>
-                            <div id="technical" class="metric-value text-orange-600">0</div>
-                        </div>
-                        <div class="icon-badge bg-orange-500">
-                            <i class="fas fa-tools"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Universidad -->
-                <div class="metric-card primary-card">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <div class="metric-title">Universidad</div>
-                            <div id="university" class="metric-value text-purple-600">0</div>
-                        </div>
-                        <div class="icon-badge bg-purple-500">
-                            <i class="fas fa-university"></i>
-                        </div>
-                    </div>
+                    <div id="university" class="text-2xl font-bold text-purple-600 mb-1">0</div>
+                    <div class="text-sm text-gray-600 font-medium">Universidad</div>
                 </div>
             </div>
         </section>
 
         <!-- Grupos por Edad -->
-        <section class="animate-slide-in" style="animation-delay: 0.5s;">
-            <h2 class="section-header">
-                <i class="fas fa-layer-group text-purple-600 mr-3"></i>
+        <section class="animate-slide-in" style="animation-delay: 0.3s;">
+            <h2 class="section-title">
+                <i class="fas fa-layer-group"></i>
                 Grupos por Edad
             </h2>
-            <div id="ageGroupCards" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"></div>
+            <div id="ageGroupCards" class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-4"></div>
         </section>
 
         <!-- Tutoras -->
-        <section class="animate-slide-in" style="animation-delay: 0.7s;">
-            <h2 class="section-header">
-                <i class="fas fa-chalkboard-teacher text-indigo-600 mr-3"></i>
+        <section class="animate-slide-in" style="animation-delay: 0.5s;">
+            <h2 class="section-title">
+                <i class="fas fa-chalkboard-teacher"></i>
                 Distribución por Tutoras
             </h2>
-            <div id="tutorCards" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+            <div id="tutorCards" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"></div>
         </section>
 
-        <!-- Actividades de la Semana -->
-        <section class="animate-slide-in" style="animation-delay: 0.9s;">
-            <h2 class="section-header">
-                <i class="fas fa-calendar-week text-teal-600 mr-3"></i>
+        <!-- Actividades -->
+        <section class="animate-slide-in" style="animation-delay: 0.7s;">
+            <h2 class="section-title">
+                <i class="fas fa-calendar-week"></i>
                 Actividades de la Semana
             </h2>
             
-            <div class="glass-card rounded-2xl overflow-hidden">
+            <div class="activities-card">
                 <div id="activitiesContent">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th class="table-header">
-                                    <i class="fas fa-calendar mr-2"></i>Fecha
-                                </th>
-                                <th class="table-header">
-                                    <i class="fas fa-star mr-2"></i>Actividad
-                                </th>
-                                <th class="table-header">
-                                    <i class="fas fa-info-circle mr-2"></i>Descripción
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody id="activitiesTableBody"></tbody>
-                    </table>
-                    <div id="noActivitiesMessage" class="hidden text-center py-12">
-                        <div class="text-6xl mb-4">📅</div>
-                        <h3 class="text-xl font-semibold text-gray-600 mb-2">No hay actividades programadas</h3>
-                        <p class="text-gray-500">¡Tiempo perfecto para planificar nuevas aventuras!</p>
+                    <div id="activitiesContainer"></div>
+                    <div id="noActivitiesMessage" class="hidden text-center py-16">
+                        <div class="text-8xl mb-6 opacity-20">📅</div>
+                        <h3 class="text-2xl font-bold text-gray-600 mb-3">No hay actividades programadas</h3>
+                        <p class="text-gray-500 text-lg">¡Tiempo perfecto para planificar nuevas aventuras!</p>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Floating Action Button -->
-    <button id="floatingRefresh" class="floating-btn">
-        <i class="fas fa-sync-alt"></i>
+    <!-- Floating Refresh Button -->
+    <button id="floatingRefresh" class="floating-refresh">
+        <i class="fas fa-sync-alt text-xl"></i>
     </button>
 
     <script>
@@ -437,7 +549,6 @@
             }
 
             startAutoRefresh() {
-                // Auto-refresh cada 5 minutos
                 setInterval(() => {
                     if (!this.isLoading) {
                         this.loadData();
@@ -447,13 +558,6 @@
 
             setConnectionStatus(status, message = '') {
                 const statusElement = document.getElementById('connectionStatus');
-                const iconClasses = {
-                    active: 'fas fa-check-circle',
-                    inactive: 'fas fa-spinner fa-spin',
-                    error: 'fas fa-exclamation-triangle',
-                    server_error: 'fas fa-server'
-                };
-
                 const statusMessages = {
                     active: 'Conectado',
                     inactive: 'Cargando...',
@@ -461,9 +565,17 @@
                     server_error: 'Error del Servidor (404)'
                 };
 
-                statusElement.className = `status-badge status-${status === 'server_error' ? 'server-error' : status}`;
+                const statusClasses = {
+                    active: 'status-connected',
+                    inactive: 'status-loading',
+                    error: 'status-error',
+                    server_error: 'status-error'
+                };
+
+                const statusDot = statusElement.querySelector('.status-dot');
+                statusDot.className = `status-dot ${statusClasses[status]}`;
                 statusElement.innerHTML = `
-                    <i class="${iconClasses[status]} mr-2"></i>
+                    <div class="status-dot ${statusClasses[status]}"></div>
                     ${message || statusMessages[status]}
                 `;
             }
@@ -472,7 +584,7 @@
                 const notification = document.createElement('div');
                 notification.className = `notification ${type}`;
                 notification.innerHTML = `
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center gap-3">
                         <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
                         <span>${message}</span>
                     </div>
@@ -522,7 +634,6 @@
                         fetch(`${this.GOOGLE_APPS_SCRIPT_URL}?sheet=Actividades`)
                     ]);
 
-                    // Manejo específico de errores
                     if (participantsResponse.status === 404 || activitiesResponse.status === 404) {
                         throw new Error('SERVER_404');
                     }
@@ -574,7 +685,6 @@
                     }
                 }
 
-                // Auto-retry logic
                 if (this.retryCount < this.maxRetries && !manual) {
                     setTimeout(() => this.loadData(), 5000 * this.retryCount);
                 }
@@ -589,7 +699,6 @@
             processParticipants(participants) {
                 const stats = this.calculateStats(participants);
                 this.updateGeneralStats(stats);
-                this.updateEducationStats(stats);
                 this.updateAgeGroups(stats.ageGroups);
                 this.updateTutorCards(stats.tutorCounts);
             }
@@ -644,63 +753,93 @@
                 const grado = (participant['GRADO ESCOLAR'] || '').toUpperCase().trim();
                 const tecnico = (participant.TECNICO || '').toUpperCase().trim();
 
-                // Prioridad 1: Universidad (siempre gana sobre técnico)
                 if (grado.includes('UNIVERSIDAD')) {
                     stats.university++;
-                    return;
-                }
-
-                // Prioridad 2: Técnico (solo si no hay universidad)
-                if (tecnico && tecnico !== '-' && tecnico !== '') {
+                } else if (tecnico && tecnico !== '-' && tecnico !== '') {
                     stats.technical++;
-                    return;
-                }
-
-                // Prioridad 3: Bachillerato/Secundaria
-                if (grado.includes('BACHILLER') || grado.includes('SECUNDARIA')) {
+                } else if (grado.includes('BACHILLERATO') || grado.includes('SECUNDARIA') || 
+                          grado.includes('10') || grado.includes('11') || 
+                          grado.includes('6') || grado.includes('7') || 
+                          grado.includes('8') || grado.includes('9')) {
                     stats.inHighSchool++;
-                    return;
-                }
-
-                // Prioridad 4: Primaria
-                if (grado.includes('PRIMARIA') || grado.includes('PREPARATORIA')) {
+                } else if (grado.includes('PRIMARIA') || grado.includes('PREESCOLAR') || 
+                          grado.includes('1') || grado.includes('2') || 
+                          grado.includes('3') || grado.includes('4') || 
+                          grado.includes('5') || grado.includes('KINDER') || 
+                          grado.includes('JARDIN')) {
                     stats.inPrimary++;
-                    return;
-                }
-
-                // Si no está en ninguna categoría o está marcado como "No Inscrito"
-                if (grado.includes('NO INSCRITO') || grado === '' || grado === '-') {
+                } else if (grado === '-' || grado === '' || grado === 'NO ESTUDIA') {
                     stats.notStudying++;
+                } else {
+                    // Clasificación por defecto basada en la edad si el grado no es claro
+                    const age = this.calculateAge(participant['FECHA NACIMIENTO']);
+                    if (age >= 18) {
+                        stats.notStudying++;
+                    } else if (age >= 12) {
+                        stats.inHighSchool++;
+                    } else if (age >= 3) {
+                        stats.inPrimary++;
+                    } else {
+                        stats.notStudying++;
+                    }
                 }
             }
 
             processAge(participant, stats) {
-                if (!participant['FECHA NACIMIENTO']) return;
-
-                const birthDate = new Date(participant['FECHA NACIMIENTO']);
-                if (isNaN(birthDate)) return;
-
-                const today = new Date();
-                let age = today.getFullYear() - birthDate.getFullYear();
-                const monthDiff = today.getMonth() - birthDate.getMonth();
+                const age = this.calculateAge(participant['FECHA NACIMIENTO']);
                 
-                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-                    age--;
+                if (age === null) {
+                    return; // No se puede calcular la edad
                 }
 
-                if (age >= 0 && age <= 1) stats.ageGroups['SUPERVIVENCIA (0-1)']++;
-                else if (age > 1 && age <= 2) stats.ageGroups['CAMINADORES (1-2)']++;
-                else if (age > 2 && age <= 5) stats.ageGroups['EXPLORADORES (3-5)']++;
-                else if (age > 5 && age <= 8) stats.ageGroups['SEMILLAS (6-8)']++;
-                else if (age > 8 && age <= 11) stats.ageGroups['VENCEDORES (9-11)']++;
-                else if (age > 11 && age <= 14) stats.ageGroups['VISIONARIOS (12-14)']++;
-                else if (age > 14 && age <= 18) stats.ageGroups['GENERACIÓN EX. (15-18)']++;
-                else if (age >= 19) stats.ageGroups['JÓVENES (19+)']++;
+                if (age <= 1) {
+                    stats.ageGroups['SUPERVIVENCIA (0-1)']++;
+                } else if (age <= 2) {
+                    stats.ageGroups['CAMINADORES (1-2)']++;
+                } else if (age <= 5) {
+                    stats.ageGroups['EXPLORADORES (3-5)']++;
+                } else if (age <= 8) {
+                    stats.ageGroups['SEMILLAS (6-8)']++;
+                } else if (age <= 11) {
+                    stats.ageGroups['VENCEDORES (9-11)']++;
+                } else if (age <= 14) {
+                    stats.ageGroups['VISIONARIOS (12-14)']++;
+                } else if (age <= 18) {
+                    stats.ageGroups['GENERACIÓN EX. (15-18)']++;
+                } else {
+                    stats.ageGroups['JÓVENES (19+)']++;
+                }
             }
 
             processTutor(participant, stats) {
-                const tutor = participant.TUTORA ? participant.TUTORA.trim() : 'Sin Asignar';
+                const tutor = participant.TUTORA || 'Sin Tutora';
                 stats.tutorCounts[tutor] = (stats.tutorCounts[tutor] || 0) + 1;
+            }
+
+            calculateAge(birthDate) {
+                if (!birthDate || birthDate === '-' || birthDate === '') {
+                    return null;
+                }
+
+                try {
+                    const today = new Date();
+                    const birth = new Date(birthDate);
+                    
+                    if (isNaN(birth.getTime())) {
+                        return null;
+                    }
+
+                    let age = today.getFullYear() - birth.getFullYear();
+                    const monthDiff = today.getMonth() - birth.getMonth();
+                    
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                        age--;
+                    }
+                    
+                    return Math.max(0, age);
+                } catch (error) {
+                    return null;
+                }
             }
 
             updateGeneralStats(stats) {
@@ -708,28 +847,26 @@
                 document.getElementById('totalBoys').textContent = stats.boys;
                 document.getElementById('totalGirls').textContent = stats.girls;
                 document.getElementById('notBorn').textContent = stats.notBorn;
-
-                // Update progress bars
-                if (stats.total > 0) {
-                    const boysPercent = (stats.boys / stats.total) * 100;
-                    const girlsPercent = (stats.girls / stats.total) * 100;
-                    const notBornPercent = (stats.notBorn / stats.total) * 100;
-
-                    setTimeout(() => {
-                        document.querySelector('#boysProgress .progress-fill').style.width = `${boysPercent}%`;
-                        document.querySelector('#girlsProgress .progress-fill').style.width = `${girlsPercent}%`;
-                        document.querySelector('#notBornProgress .progress-fill').style.width = `${notBornPercent}%`;
-                        document.querySelector('#totalProgress').style.width = '100%';
-                    }, 500);
-                }
-            }
-
-            updateEducationStats(stats) {
                 document.getElementById('notStudying').textContent = stats.notStudying;
                 document.getElementById('inPrimary').textContent = stats.inPrimary;
                 document.getElementById('inHighSchool').textContent = stats.inHighSchool;
                 document.getElementById('technical').textContent = stats.technical;
                 document.getElementById('university').textContent = stats.university;
+
+                // Actualizar anillos de progreso
+                this.updateProgressRings(stats);
+            }
+
+            updateProgressRings(stats) {
+                const total = stats.total || 1; // Evitar división por cero
+                
+                const boysPercent = Math.round((stats.boys / total) * 100);
+                const girlsPercent = Math.round((stats.girls / total) * 100);
+                const notBornPercent = Math.round((stats.notBorn / total) * 100);
+
+                document.getElementById('boysRing').style.setProperty('--progress', `${boysPercent}%`);
+                document.getElementById('girlsRing').style.setProperty('--progress', `${girlsPercent}%`);
+                document.getElementById('notBornRing').style.setProperty('--progress', `${notBornPercent}%`);
             }
 
             updateAgeGroups(ageGroups) {
@@ -737,31 +874,37 @@
                 container.innerHTML = '';
 
                 const colors = [
-                    'from-red-400 to-red-600',
-                    'from-orange-400 to-orange-600',
-                    'from-yellow-400 to-yellow-600',
-                    'from-green-400 to-green-600',
-                    'from-blue-400 to-blue-600',
-                    'from-indigo-400 to-indigo-600',
-                    'from-purple-400 to-purple-600',
-                    'from-pink-400 to-pink-600'
+                    'linear-gradient(135deg, #ff6b6b, #ee5a52)',
+                    'linear-gradient(135deg, #4ecdc4, #44a08d)',
+                    'linear-gradient(135deg, #45b7d1, #96c93d)',
+                    'linear-gradient(135deg, #f9ca24, #f0932b)',
+                    'linear-gradient(135deg, #eb4d4b, #c44569)',
+                    'linear-gradient(135deg, #6c5ce7, #a29bfe)',
+                    'linear-gradient(135deg, #fd79a8, #fdcb6e)',
+                    'linear-gradient(135deg, #00b894, #00cec9)'
                 ];
 
-                Object.entries(ageGroups).forEach(([groupName, count], index) => {
+                const icons = [
+                    'fa-baby',
+                    'fa-child',
+                    'fa-puzzle-piece',
+                    'fa-seedling',
+                    'fa-trophy',
+                    'fa-eye',
+                    'fa-rocket',
+                    'fa-star'
+                ];
+
+                Object.entries(ageGroups).forEach(([group, count], index) => {
                     const card = document.createElement('div');
-                    card.className = 'metric-card primary-card animate-fade-in';
-                    card.style.animationDelay = `${index * 0.1}s`;
-                    
+                    card.className = 'age-card';
                     card.innerHTML = `
-                        <div class="text-center">
-                            <div class="w-12 h-12 mx-auto mb-3 bg-gradient-to-br ${colors[index]} rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                ${count}
-                            </div>
-                            <h3 class="metric-title text-center">${groupName}</h3>
-                            <div class="text-lg font-semibold text-gray-700">${count} participantes</div>
+                        <div class="age-icon" style="background: ${colors[index % colors.length]}">
+                            <i class="fas ${icons[index % icons.length]}"></i>
                         </div>
+                        <div class="text-2xl font-bold text-gray-700 mb-1">${count}</div>
+                        <div class="text-xs text-gray-600 font-medium leading-tight">${group}</div>
                     `;
-                    
                     container.appendChild(card);
                 });
             }
@@ -771,140 +914,110 @@
                 container.innerHTML = '';
 
                 const colors = [
-                    'from-teal-400 to-teal-600',
-                    'from-cyan-400 to-cyan-600',
-                    'from-sky-400 to-sky-600',
-                    'from-blue-400 to-blue-600',
-                    'from-indigo-400 to-indigo-600',
-                    'from-purple-400 to-purple-600',
-                    'from-fuchsia-400 to-fuchsia-600',
-                    'from-pink-400 to-pink-600',
-                    'from-rose-400 to-rose-600',
-                    'from-red-400 to-red-600'
+                    'linear-gradient(135deg, #667eea, #764ba2)',
+                    'linear-gradient(135deg, #f093fb, #f5576c)',
+                    'linear-gradient(135deg, #4facfe, #00f2fe)',
+                    'linear-gradient(135deg, #43e97b, #38f9d7)',
+                    'linear-gradient(135deg, #fa709a, #fee140)',
+                    'linear-gradient(135deg, #a8edea, #fed6e3)',
+                    'linear-gradient(135deg, #ff9a9e, #fecfef)',
+                    'linear-gradient(135deg, #ffecd2, #fcb69f)',
+                    'linear-gradient(135deg, #ff8a80, #ea80fc)',
+                    'linear-gradient(135deg, #8fd3f4, #84fab0)'
                 ];
 
-                Object.entries(tutorCounts).forEach(([tutorName, count], index) => {
+                Object.entries(tutorCounts).forEach(([tutor, count], index) => {
                     const card = document.createElement('div');
-                    card.className = 'metric-card success-card animate-fade-in cursor-pointer transform transition-all duration-300 hover:scale-105';
-                    card.style.animationDelay = `${index * 0.1}s`;
+                    card.className = 'tutor-card';
                     
-                    const colorIndex = index % colors.length;
+                    const initials = tutor.split(' ').map(word => word[0]).join('').substring(0, 2).toUpperCase();
                     
                     card.innerHTML = `
-                        <div class="text-center">
-                            <div class="w-14 h-14 mx-auto mb-3 bg-gradient-to-br ${colors[colorIndex]} rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <h3 class="font-semibold text-gray-800 mb-1 text-sm">${tutorName}</h3>
-                            <div class="text-2xl font-bold text-teal-600">${count}</div>
-                            <div class="text-xs text-gray-500">participantes</div>
+                        <div class="tutor-avatar" style="background: ${colors[index % colors.length]}">
+                            ${initials}
                         </div>
+                        <div class="text-2xl font-bold text-gray-700 mb-1">${count}</div>
+                        <div class="text-sm text-gray-600 font-medium text-center leading-tight">${tutor}</div>
                     `;
-                    
                     container.appendChild(card);
                 });
             }
 
             processActivities(activities) {
-                const tableBody = document.getElementById('activitiesTableBody');
-                const noActivitiesMsg = document.getElementById('noActivitiesMessage');
+                const container = document.getElementById('activitiesContainer');
+                const noActivitiesMessage = document.getElementById('noActivitiesMessage');
                 
-                tableBody.innerHTML = '';
+                container.innerHTML = '';
 
-                const currentWeek = this.getCurrentWeekRange();
-                let activitiesFound = false;
-
-                activities.forEach(activity => {
-                    const activityDate = this.parseActivityDate(activity.Fecha);
-                    
-                    if (activityDate && activityDate >= currentWeek.start && activityDate <= currentWeek.end) {
-                        const row = document.createElement('tr');
-                        row.className = 'table-row';
-                        
-                        row.innerHTML = `
-                            <td class="table-cell">
-                                <div class="flex items-center space-x-2">
-                                    <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
-                                    <span class="font-semibold">${this.formatDate(activityDate)}</span>
-                                </div>
-                            </td>
-                            <td class="table-cell">
-                                <div class="font-medium text-gray-900">${activity.Actividad || 'Sin título'}</div>
-                            </td>
-                            <td class="table-cell">
-                                <div class="text-gray-600">${activity.Descripción || 'Sin descripción'}</div>
-                            </td>
-                        `;
-                        
-                        tableBody.appendChild(row);
-                        activitiesFound = true;
-                    }
-                });
-
-                if (activitiesFound) {
-                    noActivitiesMsg.classList.add('hidden');
-                } else {
-                    noActivitiesMsg.classList.remove('hidden');
+                if (!activities || activities.length === 0) {
+                    container.classList.add('hidden');
+                    noActivitiesMessage.classList.remove('hidden');
+                    return;
                 }
-            }
 
-            getCurrentWeekRange() {
+                container.classList.remove('hidden');
+                noActivitiesMessage.classList.add('hidden');
+
+                // Filtrar y ordenar actividades de la semana
                 const today = new Date();
-                const dayOfWeek = today.getDay();
-                const diff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
-                
-                const start = new Date(today.getFullYear(), today.getMonth(), diff);
-                start.setHours(0, 0, 0, 0);
-                
-                const end = new Date(start);
-                end.setDate(start.getDate() + 6);
-                end.setHours(23, 59, 59, 999);
-                
-                return { start, end };
-            }
+                const weekStart = new Date(today);
+                weekStart.setDate(today.getDate() - today.getDay()); // Domingo
+                const weekEnd = new Date(weekStart);
+                weekEnd.setDate(weekStart.getDate() + 6); // Sábado
 
-            parseActivityDate(dateStr) {
-                if (!dateStr) return null;
+                const weekActivities = activities.filter(activity => {
+                    const activityDate = new Date(activity.FECHA);
+                    return activityDate >= weekStart && activityDate <= weekEnd;
+                }).sort((a, b) => new Date(a.FECHA) - new Date(b.FECHA));
 
-                let date;
-                
-                if (dateStr.includes('-') && dateStr.split('-')[0].length === 4) {
-                    date = new Date(dateStr);
-                } else if (dateStr.includes('/')) {
-                    const parts = dateStr.split('/').map(Number);
-                    if (parts.length === 3) {
-                        const [p1, p2, p3] = parts;
-                        if (p1 > 12) {
-                            date = new Date(p3, p2 - 1, p1);
-                        } else {
-                            date = new Date(p3, p1 - 1, p2);
-                        }
-                    }
+                if (weekActivities.length === 0) {
+                    container.classList.add('hidden');
+                    noActivitiesMessage.classList.remove('hidden');
+                    return;
                 }
-                
-                return date && !isNaN(date) ? date : null;
-            }
 
-            formatDate(date) {
-                return date.toLocaleDateString('es-ES', {
-                    weekday: 'short',
-                    day: 'numeric',
-                    month: 'short'
+                weekActivities.forEach(activity => {
+                    const activityDate = new Date(activity.FECHA);
+                    const day = activityDate.getDate().toString().padStart(2, '0');
+                    const month = activityDate.toLocaleDateString('es-ES', { month: 'short' }).toUpperCase();
+                    
+                    const activityItem = document.createElement('div');
+                    activityItem.className = 'activity-item';
+                    activityItem.innerHTML = `
+                        <div class="activity-date">
+                            <div>${day}</div>
+                            <div style="font-size: 0.7rem;">${month}</div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-lg font-semibold text-gray-800 mb-1">${activity.ACTIVIDAD || 'Actividad sin nombre'}</div>
+                            <div class="text-sm text-gray-600 mb-2">${activity.DESCRIPCION || 'Sin descripción'}</div>
+                            <div class="flex items-center gap-4 text-sm text-gray-500">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-clock"></i>
+                                    <span>${activity.HORA || 'Hora por definir'}</span>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>${activity.LUGAR || 'Lugar por definir'}</span>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-users"></i>
+                                    <span>${activity.RESPONSABLE || 'Sin responsable'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(activityItem);
                 });
             }
 
             animateCounters() {
-                const counters = document.querySelectorAll('.metric-value, .main-metric-value');
+                const counters = document.querySelectorAll('.hero-number, .metric-circle, .progress-content > div, .age-card .text-2xl, .tutor-card .text-2xl');
                 
                 counters.forEach(counter => {
-                    const target = parseInt(counter.textContent);
-                    if (isNaN(target)) return;
-                    
+                    const target = parseInt(counter.textContent) || 0;
                     let current = 0;
-                    const increment = target / 30;
-                    const duration = 1000;
-                    const stepTime = duration / 30;
-                    
+                    const increment = target / 50;
                     const timer = setInterval(() => {
                         current += increment;
                         if (current >= target) {
@@ -913,22 +1026,28 @@
                         } else {
                             counter.textContent = Math.floor(current);
                         }
-                    }, stepTime);
+                    }, 20);
                 });
             }
         }
 
-        // Initialize Dashboard
+        // Inicializar cuando el DOM esté listo
         document.addEventListener('DOMContentLoaded', () => {
             new ParticipantsDashboard();
         });
 
-        // Service Worker para PWA (opcional)
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').catch(() => {
-                // Service worker no disponible
-            });
-        }
+        // Manejar cambios en el estado de conexión
+        window.addEventListener('online', () => {
+            if (window.dashboard) {
+                window.dashboard.loadData();
+            }
+        });
+
+        window.addEventListener('offline', () => {
+            if (window.dashboard) {
+                window.dashboard.setConnectionStatus('error', 'Sin conexión a internet');
+            }
+        });
     </script>
 </body>
 </html>
