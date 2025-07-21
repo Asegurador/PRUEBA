@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Participantes - Organizado y Dinámico</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Estilos base para las tarjetas y tablas */
+        .card {
+            @apply bg-white p-6 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl;
+        }
+        .card-title {
+            @apply text-xl lg:text-2xl font-extrabold mb-4 text-gray-800 border-b-2 border-blue-200 pb-2;
+        }
+        .main-card-value { /* Estilo específico para el total de participantes */
+            @apply text-5xl lg:text-6xl font-bold text-blue-700 animate-pulse;
+        }
+        .sub-card-value { /* Estilo para valores dentro de tarjetas */
+            @apply text-3xl font-bold;
+        }
+        .small-card-value { /* Estilo para valores en tarjetas pequeñas (grupos, tutoras) */
+            @apply text-2xl font-bold;
+        }
+        .table-header {
+            @apply px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider bg-blue-50 rounded-t-lg;
+        }
+        .table-cell {
+            @apply px-4 py-3 whitespace-nowrap text-sm text-gray-800;
+        }
+
+        /* Animaciones personalizadas */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .animate-pulse {
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        /* Estilos para el indicador de estado de conexión */
+        #connectionStatus {
+            @apply px-3 py-1 rounded-full text-sm font-medium;
+        }
+        .status-active {
+            @apply bg-green-200 text-green-800;
+        }
+        .status-inactive {
+            @apply bg-red-200 text-red-800;
+        }
+        .status-error {
+            @apply bg-yellow-200 text-yellow-800;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-indigo-200 font-sans leading-normal tracking-normal text-gray-900">
+
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-700 text-white p-6 md:p-8 shadow-xl">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">📊 Dashboard de Participantes</h1>
+            <div class="flex items-center space-x-4">
+                <span id="connectionStatus" class="status-inactive">Inactivo</span>
+                <button id="refreshDataBtn" class="bg-blue-900 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg">
+                    Actualizar Datos 🔄
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-6 md:p-10 space-y-10">
+
+        <section class="card fade-in" style="animation-delay: 0.1s;">
+            <h2 class="card-title text-center">🌟 Panorama de Participantes 🌟</h2>
+            <div class="flex flex-col items-center mb-6">
+                <p class="text-lg font-semibold text-gray-600">Total de Participantes en Nuestra Comunidad:</p>
+                <p id="totalParticipants" class="main-card-value">0</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                <div class="p-4 bg-blue-50 rounded-lg shadow-sm">
+                    <p class="text-md font-medium text-gray-700">Niños 👦</p>
+                    <p id="totalBoys" class="sub-card-value text-green-600">0</p>
+                </div>
+                <div class="p-4 bg-pink-50 rounded-lg shadow-sm">
+                    <p class="text-md font-medium text-gray-700">Niñas 👧</p>
+                    <p id="totalGirls" class="sub-card-value text-pink-600">0</p>
+                </div>
+                <div class="p-4 bg-yellow-50 rounded-lg shadow-sm">
+                    <p class="text-md font-medium text-gray-700">Sin Fecha Nac. (Posible Sin Nacer) 🐣</p>
+                    <p id="notBorn" class="sub-card-value text-yellow-600">0</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="card fade-in" style="animation-delay: 0.3s;">
+            <h2 class="card-title">📚 Nivel Educativo: ¡Formando Futuros!</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                <div class="p-4 bg-red-50 rounded-lg shadow-sm">
+                    <p class="text-md font-medium text-gray-700">No Estudiando 🚫</p>
+                    <p id="notStudying" class="small-card-value text-red-600">0</p>
+                </div>
+                <div class="p-4 bg-blue-50 rounded-lg shadow-sm">
+                    <p class="text-md font-medium text-gray-700">En Primaria 📝</p>
+                    <p id="inPrimary" class="small-card-value text-blue-600">0</p>
+                </div>
+                <div class="p-4 bg-green-50 rounded-lg shadow-sm">
+                    <p class="text-md font-medium text-gray-700">En Bachiller 🧑‍🎓</p>
+                    <p id="inHighSchool" class="small-card-value text-green-600">0</p>
+                </div>
+                <div class="p-4 bg-purple-50 rounded-lg shadow-sm">
+                    <p class="text-md font-medium text-gray-700">Educación Superior 🎓</p>
+                    <p id="higherEducation" class="small-card-value text-purple-600">0</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="card fade-in" style="animation-delay: 0.5s;">
+            <h2 class="card-title">👶 Grupos por Edad: ¡Cada Etapa Cuenta!</h2>
+            <div id="ageGroupCharts" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                </div>
+        </section>
+
+        <section class="card fade-in" style="animation-delay: 0.7s;">
+            <h2 class="card-title">👩‍🏫 Conteo por Tutoras: ¡Nuestros Guías!</h2>
+            <div id="tutorCountCharts" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                </div>
+        </section>
+
+        <section class="card fade-in" style="animation-delay: 0.9s;">
+            <h2 class="card-title">🗓️ Actividades de la Semana: ¡Agenda al Día!</h2>
+            <div id="weeklyActivities" class="overflow-x-auto rounded-lg shadow-inner">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-blue-100">
+                        <tr>
+                            <th class="table-header rounded-tl-lg">Fecha</th>
+                            <th class="table-header">Actividad</th>
+                            <th class="table-header rounded-tr-lg">Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activitiesTableBody" class="bg-white divide-y divide-gray-200">
+                        </tbody>
+                </table>
+                <p id="noActivitiesMessage" class="text-center text-gray-500 mt-4 text-lg p-4 hidden">
+                    ¡Parece que no hay actividades programadas para esta semana! 🎉 Tiempo para crear nuevas aventuras.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    // ¡TU URL DE GOOGLE APPS SCRIPT DESPLEGADO!
+    const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4weug7FGWiujFzaNMShwTg7Y-gNi9EEDL_ow2Vmw_lm8rAUdIIqWGbkQHLtPmsdMV/exec";
+
+    const refreshDataBtn = document.getElementById('refreshDataBtn');
+    const connectionStatusSpan = document.getElementById('connectionStatus');
+
+    // Función para actualizar el estado de la conexión visualmente
+    function setConnectionStatus(status) {
+        connectionStatusSpan.classList.remove('status-active', 'status-inactive', 'status-error');
+        if (status === 'active') {
+            connectionStatusSpan.textContent = 'Activo ✅';
+            connectionStatusSpan.classList.add('status-active');
+        } else if (status === 'inactive') {
+            connectionStatusSpan.textContent = 'Cargando... 💤';
+            connectionStatusSpan.classList.add('status-inactive');
+        } else if (status === 'error') {
+            connectionStatusSpan.textContent = 'Error (Conexión/Datos) ❌';
+            connectionStatusSpan.classList.add('status-error');
+        }
+    }
+
+    // Cargar datos al inicio y aplicar animaciones
+    fetchData();
+
+    // Recargar datos al hacer clic en el botón
+    refreshDataBtn.addEventListener('click', fetchData);
+
+    async function fetchData() {
+        setConnectionStatus('inactive'); // Indicar que se está cargando
+
+        try {
+            // Ya no extraemos el ID de la hoja, la URL de Apps Script es el endpoint directo
+            const appsScriptBaseUrl = GOOGLE_APPS_SCRIPT_URL;
+
+            // Solicitar datos de las hojas "Participantes" y "Actividades"
+            const [participantsResponse, activitiesResponse] = await Promise.all([
+                fetch(`${appsScriptBaseUrl}?sheet=Participantes`),
+                fetch(`${appsScriptBaseUrl}?sheet=Actividades`)
+            ]);
+
+            // Verificar si las respuestas son exitosas (status 200 OK)
+            if (!participantsResponse.ok || !activitiesResponse.ok) {
+                let errorMessage = 'Error al obtener datos del Apps Script.';
+                if (participantsResponse.status === 404 || activitiesResponse.status === 404) {
+                    errorMessage = 'Error 404: Asegúrate de que los nombres de las hojas (Participantes, Actividades) sean correctos en tu Google Sheet.';
+                }
+                throw new Error(errorMessage);
+            }
+
+            // Apps Script ya devuelve JSON, no necesitamos parsear CSV
+            const participants = await participantsResponse.json();
+            const activities = await activitiesResponse.json();
+
+            // Si Apps Script devuelve un error (por ejemplo, hoja no encontrada)
+            if (participants.error || activities.error) {
+                throw new Error(participants.error || activities.error);
+            }
+
+            // Procesar y mostrar los datos
+            processParticipantsData(participants);
+            displayWeeklyActivities(activities);
+            setConnectionStatus('active'); // Indicar que la conexión es exitosa
+
+            // Aplicar animaciones después de cargar los datos
+            document.querySelectorAll('.fade-in').forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.15}s`;
+                el.classList.add('animate-fadeIn');
+            });
+
+        } catch (error) {
+            console.error('Error al cargar los datos:', error);
+            // Determinar el tipo de error para un mensaje más útil al usuario
+            if (!navigator.onLine) {
+                 setConnectionStatus('error'); // No hay conexión a Internet
+                 alert('¡Sin conexión a Internet! Por favor, verifica tu conexión.');
+            } else if (error.message.includes('Failed to fetch')) {
+                 setConnectionStatus('error'); // Posiblemente CORS o URL incorrecta de Apps Script
+                 alert('Error de red al intentar conectar. Asegúrate de que la URL de Apps Script sea correcta y esté publicada con acceso "Cualquier usuario".');
+            } else {
+                 setConnectionStatus('error'); // Otros errores (del script, hoja vacía, etc.)
+                 alert(`Hubo un error al cargar los datos: ${error.message}. Revisa los nombres de las columnas y el estado de la aplicación web.`);
+            }
+        }
+    }
+
+    // Esta función ya no es necesaria porque Apps Script devuelve JSON directamente
+    // function parseCSV(csvText) { ... }
+
+    function processParticipantsData(participants) {
+        const totalParticipants = participants.length;
+        let totalGirls = 0;
+        let totalBoys = 0;
+        let notBorn = 0; // Para participantes sin fecha de nacimiento (o no registrados)
+
+        // Contadores para niveles educativos
+        let notStudying = 0;
+        let inPrimary = 0;
+        let inHighSchool = 0;
+        let higherEducation = 0; // Incluye Técnico, Tecnólogo, Universidad
+
+        // Grupos de edad específicos
+        const ageGroups = {
+            'SUPERVIVENCIA (0-1)': 0,
+            'CAMINADORES (1-2)': 0,
+            'EXPLORADORES (3-5)': 0,
+            'SEMILLAS (6-8)': 0,
+            'VENCEDORES (9-11)': 0,
+            'VISIONARIOS (12-14)': 0,
+            'GENERACIÓN EX. (15-18)': 0,
+            'JÓVENES (19+)': 0
+        };
+
+        const tutorCounts = {}; // Para el conteo por tutoras
+
+        participants.forEach(p => {
+            // Contar por sexo
+            if (p.SEXO && p.SEXO.toUpperCase() === 'FEMENINO') {
+                totalGirls++;
+            } else if (p.SEXO && p.SEXO.toUpperCase() === 'MASCULINO') {
+                totalBoys++;
+            }
+
+            // Lógica para niveles educativos (¡Mejorada según tus indicaciones!)
+            const gradoEscolar = p['GRADO ESCOLAR'] ? p['GRADO ESCOLAR'].toUpperCase().trim() : '';
+            const tecnico = p.TECNICO ? p.TECNICO.toUpperCase().trim() : '';
+
+            let educationAssigned = false; // Bandera para asegurar que solo se asigne a una categoría
+
+            // Prioridad 1: Universidad (incluso si también tiene Técnico)
+            if (gradoEscolar.includes('UNIVERSIDAD')) {
+                higherEducation++;
+                educationAssigned = true;
+            }
+            // Prioridad 2: Técnico (si no es Universidad y tiene valor en 'TECNICO' y no es un guion)
+            else if (tecnico !== '' && tecnico !== '-') {
+                higherEducation++;
+                educationAssigned = true;
+            }
+            // Prioridad 3: Bachiller/Secundaria
+            else if (gradoEscolar.includes('SECUNDARIA') || gradoEscolar.includes('BACHILLER')) {
+                inHighSchool++;
+                educationAssigned = true;
+            }
+            // Prioridad 4: Primaria/Preparatoria
+            else if (gradoEscolar.includes('PRIMARIA') || gradoEscolar.includes('PREPARATORIA')) {
+                inPrimary++;
+                educationAssigned = true;
+            }
+
+            // Si no se asignó a ninguna categoría de estudio y el grado escolar es "No Inscrito" o vacío
+            if (!educationAssigned && (gradoEscolar.includes('NO INSCRITO') || gradoEscolar === '')) {
+                notStudying++;
+            }
+
+
+            // Calcular edad y agrupar por edad
+            if (p['FECHA NACIMIENTO']) {
+                const birthDate = new Date(p['FECHA NACIMIENTO']);
+                const today = new Date(); // Fecha actual del usuario
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+
+                if (age >= 0 && age <= 1) {
+                    ageGroups['SUPERVIVENCIA (0-1)']++;
+                } else if (age > 1 && age <= 2) {
+                    ageGroups['CAMINADORES (1-2)']++;
+                } else if (age > 2 && age <= 5) {
+                    ageGroups['EXPLORADORES (3-5)']++;
+                } else if (age > 5 && age <= 8) {
+                    ageGroups['SEMILLAS (6-8)']++;
+                } else if (age > 8 && age <= 11) {
+                    ageGroups['VENCEDORES (9-11)']++;
+                } else if (age > 11 && age <= 14) {
+                    ageGroups['VISIONARIOS (12-14)']++;
+                } else if (age > 14 && age <= 18) {
+                    ageGroups['GENERACIÓN EX. (15-18)']++;
+                } else if (age >= 19) {
+                    ageGroups['JÓVENES (19+)']++;
+                }
+            } else {
+                notBorn++; // Incrementa si no hay fecha de nacimiento
+            }
+
+            // Conteo por tutoras
+            const tutora = p.TUTORA ? p.TUTORA.trim() : 'Sin Asignar';
+            tutorCounts[tutora] = (tutorCounts[tutora] || 0) + 1;
+        });
+
+        // Actualizar el DOM: Sección 1 - Panorama General
+        document.getElementById('totalParticipants').textContent = totalParticipants;
+        document.getElementById('totalGirls').textContent = totalGirls;
+        document.getElementById('totalBoys').textContent = totalBoys;
+        document.getElementById('notBorn').textContent = notBorn;
+
+        // Actualizar el DOM: Sección 2 - Nivel Educativo
+        document.getElementById('notStudying').textContent = notStudying;
+        document.getElementById('inPrimary').textContent = inPrimary;
+        document.getElementById('inHighSchool').textContent = inHighSchool;
+        document.getElementById('higherEducation').textContent = higherEducation;
+
+        // Generar tarjetas para grupos de edad (Sección 3)
+        const ageGroupChartsDiv = document.getElementById('ageGroupCharts');
+        ageGroupChartsDiv.innerHTML = ''; // Limpiar antes de añadir
+        Object.entries(ageGroups).forEach(([groupName, count]) => {
+            const card = document.createElement('div');
+            card.className = 'card bg-purple-100 border-l-4 border-purple-500 text-center p-3 animate-fadeIn';
+            card.innerHTML = `<h3 class="text-md font-semibold text-purple-700">${groupName}</h3><p class="small-card-value text-purple-600">${count}</p>`;
+            ageGroupChartsDiv.appendChild(card);
+        });
+
+        // Generar tarjetas para el conteo por tutoras (Sección 4)
+        const tutorCountChartsDiv = document.getElementById('tutorCountCharts');
+        tutorCountChartsDiv.innerHTML = ''; // Limpiar antes de añadir
+        Object.entries(tutorCounts).forEach(([tutoraName, count]) => {
+            const card = document.createElement('div');
+            card.className = 'card bg-teal-100 border-l-4 border-teal-500 text-center p-3 animate-fadeIn';
+            card.innerHTML = `<h3 class="text-md font-semibold text-teal-700">${tutoraName}</h3><p class="small-card-value text-teal-600">${count}</p>`;
+            tutorCountChartsDiv.appendChild(card);
+        });
+    }
+
+    function displayWeeklyActivities(activities) {
+        const activitiesTableBody = document.getElementById('activitiesTableBody');
+        const noActivitiesMessage = document.getElementById('noActivitiesMessage');
+        activitiesTableBody.innerHTML = ''; // Limpiar antes de añadir
+
+        const today = new Date();
+        // Ajustamos para que la semana empiece en LUNES para la mayoría de contextos latinos
+        // getDay() devuelve 0 para domingo, 1 para lunes...
+        const dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+        // Si es domingo (0), queremos ir 6 días hacia atrás para el lunes pasado. Si es otro día, vamos (dia-1) días atrás.
+        const diff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+
+        const currentWeekStart = new Date(today.getFullYear(), today.getMonth(), diff);
+        currentWeekStart.setHours(0, 0, 0, 0); // Asegurarse de que sea el inicio del día
+
+        const currentWeekEnd = new Date(currentWeekStart.getFullYear(), currentWeekStart.getMonth(), currentWeekStart.getDate() + 6);
+        currentWeekEnd.setHours(23, 59, 59, 999); // Asegurarse de que sea el final del día
+
+        let activitiesFound = false;
+
+        activities.forEach(activity => {
+            // Asegúrate de que 'Fecha' sea el encabezado correcto en tu hoja de actividades
+            const activityDateStr = activity.Fecha;
+            if (!activityDateStr) return;
+
+            // Intentar parsear la fecha en formatos comunes (YYYY-MM-DD, MM/DD/YYYY, DD/MM/YYYY)
+            let activityDate;
+            // Prueba YYYY-MM-DD
+            if (activityDateStr.includes('-') && activityDateStr.split('-')[0].length === 4) {
+                activityDate = new Date(activityDateStr);
+            } else { // Intenta MM/DD/YYYY o DD/MM/YYYY
+                const parts = activityDateStr.split('/');
+                if (parts.length === 3) {
+                    const [p1, p2, p3] = parts.map(Number);
+                    // Suponemos MM/DD/YYYY o DD/MM/YYYY. Intentamos primero MM/DD/YYYY que es común en JS
+                    // Y si el primer número es > 12, asumimos DD/MM/YYYY
+                    if (p1 > 12) { // Probable DD/MM/YYYY
+                        activityDate = new Date(p3, p2 - 1, p1);
+                    } else { // Probable MM/DD/YYYY o ambiguo, asumimos MM/DD/YYYY
+                        activityDate = new Date(p3, p1 - 1, p2);
+                    }
+                }
+            }
+
+            if (activityDate && !isNaN(activityDate) && activityDate >= currentWeekStart && activityDate <= currentWeekEnd) {
+                const row = activitiesTableBody.insertRow();
+                row.className = 'hover:bg-blue-50 transition-all duration-200';
+                row.innerHTML = `
+                    <td class="table-cell">${activity.Fecha || 'N/A'}</td>
+                    <td class="table-cell">${activity.Actividad || 'Sin título'}</td>
+                    <td class="table-cell">${activity.Descripción || 'Sin descripción'}</td>
+                `;
+                activitiesFound = true;
+            }
+        });
+
+        if (activitiesFound) {
+            noActivitiesMessage.classList.add('hidden');
+        } else {
+            noActivitiesMessage.classList.remove('hidden');
+        }
+    }
+});
+  </script>
+</body>
+</html>
