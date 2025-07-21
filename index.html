@@ -305,8 +305,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 educationAssigned = true;
             }
 
-            // Si no se asignó a ninguna categoría de estudio y el grado escolar es "No Inscrito" o vacío
-            if (!educationAssigned && (gradoEscolar.includes('NO INSCRITO') || gradoEscolar === '')) {
+            // Si no se asignó a ninguna categoría de estudio y el grado escolar es "No Inscrito" o vacío o un guion
+            if (!educationAssigned && (gradoEscolar.includes('No Inscrito') || gradoEscolar === '' || gradoEscolar === '-')) {
                 notStudying++;
             }
 
