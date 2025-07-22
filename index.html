@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,20 +9,20 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        
+
         * {
             font-family: 'Inter', sans-serif;
         }
 
         :root {
-            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
-            --glass-gradient: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-            --shadow-soft: 0 4px 20px rgba(0,0,0,0.08);
-            --shadow-hover: 0 12px 40px rgba(0,0,0,0.15);
+            --primary-gradient: linear-gradient(135deg, #59cca0 0%, #dd912c 50%, #d946ef 100%);
+            --glass-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.15);
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #03d827 10%, #df3f23 40%, #e206e2 60%);
             background-attachment: fixed;
             min-height: 100vh;
         }
@@ -34,10 +35,10 @@
         }
 
         .card-modern {
-            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
             backdrop-filter: blur(20px);
             border-radius: 24px;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: var(--shadow-soft);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
@@ -59,7 +60,7 @@
         .card-modern:hover {
             transform: translateY(-4px);
             box-shadow: var(--shadow-hover);
-            border-color: rgba(255,255,255,0.3);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
         .card-modern:hover::before {
@@ -100,7 +101,7 @@
         .section-title {
             font-size: 1.75rem;
             font-weight: 700;
-            color: rgba(255,255,255,0.95);
+            color: rgba(255, 255, 255, 0.95);
             margin-bottom: 2rem;
             display: flex;
             align-items: center;
@@ -128,20 +129,25 @@
         .shape {
             position: absolute;
             border-radius: 50%;
-            background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
             animation: float 20s infinite linear;
         }
 
         @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); }
-            100% { transform: translateY(-100vh) rotate(360deg); }
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+            }
         }
 
         .progress-ring {
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background: conic-gradient(var(--primary-gradient) var(--progress, 0%), rgba(255,255,255,0.1) 0%);
+            background: conic-gradient(var(--primary-gradient) var(--progress, 0%), rgba(255, 255, 255, 0.1) 0%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -171,22 +177,30 @@
             animation: pulse 2s infinite;
         }
 
-        .status-connected { background: #10b981; }
-        .status-loading { background: #f59e0b; }
-        .status-error { background: #ef4444; }
+        .status-connected {
+            background: #10b981;
+        }
+
+        .status-loading {
+            background: #f59e0b;
+        }
+
+        .status-error {
+            background: #ef4444;
+        }
 
         .age-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
             border-radius: 20px;
             padding: 1.5rem;
             text-align: center;
             transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .age-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
 
         .age-icon {
@@ -203,12 +217,12 @@
         }
 
         .tutor-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
             border-radius: 20px;
             padding: 1.5rem;
             text-align: center;
             transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             position: relative;
             overflow: hidden;
         }
@@ -227,7 +241,7 @@
 
         .tutor-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
 
         .tutor-card:hover::before {
@@ -248,17 +262,17 @@
         }
 
         .activities-card {
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 24px;
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             overflow: hidden;
             box-shadow: var(--shadow-soft);
         }
 
         .activity-item {
             padding: 1.5rem;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
@@ -333,6 +347,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -356,10 +371,11 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Floating Shapes Background -->
     <div class="floating-shapes">
-        <div class="shape" style="width: 80px; height: 80px; left: 10%; animation-delay: -2s;"></div>
+        <div class="shape" style="width: 80px; height: 80px; left: 10%; animation-delay:  -2s;"></div>
         <div class="shape" style="width: 60px; height: 60px; left: 80%; animation-delay: -8s;"></div>
         <div class="shape" style="width: 100px; height: 100px; left: 50%; animation-delay: -5s;"></div>
         <div class="shape" style="width: 40px; height: 40px; left: 30%; animation-delay: -12s;"></div>
@@ -370,30 +386,40 @@
     <div id="notifications"></div>
 
     <!-- Header -->
-    <header class="relative py-8 mb-8">
-        <div class="container-fluid">
-            <div class="header-glass rounded-3xl p-8">
-                <div class="flex flex-col lg:flex-row justify-between items-center gap-6">
-                    <div class="flex items-center gap-4">
-                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center">
-                            <i class="fas fa-chart-bar text-3xl text-white"></i>
-                        </div>
+    <header class="relative py-4 sm:py-8 mb-4 sm:mb-8">
+        <div class="container-fluid mx-auto px-4">
+            <div class="header-glass rounded-3xl p-4 sm:p-6 md:p-8">
+                <div class="flex flex-col lg:flex-row justify-between items-center gap-4 sm:gap-6">
+                    <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 text-center sm:text-left">
+                        <div
+                            class="w-12 h-12 sm:w-16 sm:h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-chart-bar text-2xl sm:text-3xl text-white"></i> </div>
                         <div>
-                            <h1 class="text-4xl font-black text-white tracking-tight">Dashboard Participantes</h1>
-                            <p class="text-blue-100 font-medium opacity-80">Sistema de Gestión Avanzado</p>
+                            <h1
+                                class="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-tight">
+                                Dashboard Participantes</h1>
+                            <p class="text-xs sm:text-sm md:text-base text-blue-100 font-medium opacity-80 mt-1">Sistema
+                                de Gestión Avanzado</p>
                         </div>
                     </div>
-                    
-                    <div class="flex items-center gap-6">
-                        <div id="lastUpdate" class="text-blue-100 text-sm opacity-80"></div>
-                        <div id="connectionStatus" class="flex items-center px-4 py-2 rounded-full bg-white bg-opacity-20 text-white font-medium">
-                            <div class="status-dot status-loading"></div>
-                            Inicializando...
+
+                    <div
+                        class="flex flex-col sm:flex-row items-center justify-center sm:justify-end w-full sm:w-auto mt-4 sm:mt-0 gap-4 sm:gap-6">
+                        <div id="lastUpdate" class="text-blue-100 text-xs sm:text-sm opacity-80 whitespace-nowrap">
                         </div>
-                        <button id="refreshBtn" class="bg-white bg-opacity-20 hover:bg-opacity-30 px-6 py-3 rounded-2xl font-semibold text-white transition-all duration-300 transform hover:scale-105 flex items-center gap-2">
-                            <i id="refreshIcon" class="fas fa-sync-alt"></i>
-                            <span>Actualizar</span>
-                        </button>
+
+                        <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+                            <div id="connectionStatus"
+                                class="flex items-center px-3 py-1 sm:px-4 sm:py-2 rounded-full bg-white bg-opacity-20 text-white font-medium text-xs sm:text-sm whitespace-nowrap">
+                                <div class="status-dot status-loading mr-1 sm:mr-2"></div>
+                                Inicializando...
+                            </div>
+                            <button id="refreshBtn"
+                                class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-2xl font-semibold text-white transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 text-xs sm:text-sm w-full sm:w-auto">
+                                <i id="refreshIcon" class="fas fa-sync-alt"></i>
+                                <span>Actualizar</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -402,89 +428,115 @@
 
     <!-- Main Content -->
     <main class="container-fluid space-y-12 pb-20">
-        
+
         <!-- Resumen Principal -->
         <section class="animate-slide-in" style="animation-delay: 0.1s;">
             <h2 class="section-title">
                 <i class="fas fa-users"></i>
                 Resumen General
             </h2>
-            
+
             <!-- Hero Card -->
-            <div class="card-modern p-10 text-center mb-8">
-                <div class="text-lg font-semibold text-gray-600 mb-4 uppercase tracking-wider">Total de Participantes</div>
-                <div id="totalParticipants" class="hero-number mb-6">0</div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div class="card-modern p-6 sm:p-8 md:p-10 text-center mb-8">
+                <div class="text-base sm:text-lg font-semibold text-gray-600 mb-2 sm:mb-4 uppercase tracking-wider">
+                    Total de Participantes
+                </div>
+                <div id="totalParticipants" class="text-6xl sm:text-7xl font-extrabold text-purple-700 mb-6 sm:mb-8">0</div>
+            
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-xl mx-auto">
                     <div class="text-center">
-                        <div class="progress-ring mx-auto mb-4" style="--progress: 0%" id="boysRing">
-                            <div class="progress-content">
-                                <div id="totalBoys" class="text-2xl font-bold text-blue-600">0</div>
-                                <div class="text-sm text-gray-500">Niños</div>
+                        <div class="progress-ring mx-auto mb-2 sm:mb-4" style="--progress: 0%" id="boysRing">
+                            <div class="progress-content flex flex-col items-center justify-center">
+                                <i class="fas fa-male text-2xl sm:text-3xl text-blue-600 mb-1"></i>
+                                <div id="totalBoys" class="text-xl sm:text-2xl font-bold text-blue-600">0</div>
+                                <div class="text-xs sm:text-sm text-gray-500">Niños</div>
                             </div>
                         </div>
                     </div>
+            
                     <div class="text-center">
-                        <div class="progress-ring mx-auto mb-4" style="--progress: 0%" id="girlsRing">
-                            <div class="progress-content">
-                                <div id="totalGirls" class="text-2xl font-bold text-pink-600">0</div>
-                                <div class="text-sm text-gray-500">Niñas</div>
+                        <div class="progress-ring mx-auto mb-2 sm:mb-4" style="--progress: 0%" id="girlsRing">
+                            <div class="progress-content flex flex-col items-center justify-center">
+                                <i class="fas fa-female text-2xl sm:text-3xl text-pink-600 mb-1"></i>
+                                <div id="totalGirls" class="text-xl sm:text-2xl font-bold text-pink-600">0</div>
+                                <div class="text-xs sm:text-sm text-gray-500">Niñas</div>
                             </div>
                         </div>
                     </div>
+            
                     <div class="text-center">
-                        <div class="progress-ring mx-auto mb-4" style="--progress: 0%" id="notBornRing">
-                            <div class="progress-content">
-                                <div id="notBorn" class="text-2xl font-bold text-yellow-600">0</div>
-                                <div class="text-sm text-gray-500">Por Nacer</div>
+                        <div class="progress-ring mx-auto mb-2 sm:mb-4" style="--progress: 0%" id="notBornRing">
+                            <div class="progress-content flex flex-col items-center justify-center">
+                                <i class="fas fa-baby text-2xl sm:text-3xl text-yellow-600 mb-1"></i>
+                                <div id="notBorn" class="text-xl sm:text-2xl font-bold text-yellow-600">0</div>
+                                <div class="text-xs sm:text-sm text-gray-500">Por Nacer</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <section class="animate-slide-in" style="animation-delay: 0.1s;">
+                <h2 class="section-title">
+                    <i class="fas fa-users"></i>
+                    Educación
+                </h2>
 
             <!-- Educación -->
             <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div class="card-modern p-6 text-center">
-                    <div class="metric-circle mx-auto mb-4" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
-                        <i class="fas fa-times"></i>
+                    <div class="metric-circle mx-auto mb-4"
+                         style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                        <div class="metric-content"> <i class="fas fa-times text-white text-3xl"></i> <div id="notStudying" class="text-white text-2xl font-bold hero-number-small">0</div>
+                        </div>
                     </div>
-                    <div id="notStudying" class="text-2xl font-bold text-red-600 mb-1">0</div>
                     <div class="text-sm text-gray-600 font-medium">Sin Estudios</div>
                 </div>
-
+            
                 <div class="card-modern p-6 text-center">
-                    <div class="metric-circle mx-auto mb-4" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
-                        <i class="fas fa-book"></i>
+                    <div class="metric-circle mx-auto mb-4"
+                         style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                        <div class="metric-content">
+                            <i class="fas fa-book text-white text-3xl"></i>
+                            <div id="inPrimary" class="text-white text-2xl font-bold hero-number-small">0</div>
+                        </div>
                     </div>
-                    <div id="inPrimary" class="text-2xl font-bold text-blue-600 mb-1">0</div>
                     <div class="text-sm text-gray-600 font-medium">Primaria</div>
                 </div>
-
+            
                 <div class="card-modern p-6 text-center">
-                    <div class="metric-circle mx-auto mb-4" style="background: linear-gradient(135deg, #10b981, #059669);">
-                        <i class="fas fa-user-graduate"></i>
+                    <div class="metric-circle mx-auto mb-4"
+                         style="background: linear-gradient(135deg, #10b981, #059669);">
+                        <div class="metric-content">
+                            <i class="fas fa-user-graduate text-white text-3xl"></i>
+                            <div id="inHighSchool" class="text-white text-2xl font-bold hero-number-small">0</div>
+                        </div>
                     </div>
-                    <div id="inHighSchool" class="text-2xl font-bold text-green-600 mb-1">0</div>
                     <div class="text-sm text-gray-600 font-medium">Bachillerato</div>
                 </div>
-
+            
                 <div class="card-modern p-6 text-center">
-                    <div class="metric-circle mx-auto mb-4" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
-                        <i class="fas fa-tools"></i>
+                    <div class="metric-circle mx-auto mb-4"
+                         style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                        <div class="metric-content">
+                            <i class="fas fa-tools text-white text-3xl"></i>
+                            <div id="technical" class="text-white text-2xl font-bold hero-number-small">0</div>
+                        </div>
                     </div>
-                    <div id="technical" class="text-2xl font-bold text-orange-600 mb-1">0</div>
                     <div class="text-sm text-gray-600 font-medium">Técnico</div>
                 </div>
-
+            
                 <div class="card-modern p-6 text-center">
                     <div class="metric-circle mx-auto mb-4">
-                        <i class="fas fa-university"></i>
+                        <div class="metric-content">
+                            <i class="fas fa-university text-white text-3xl"></i>
+                            <div id="university" class="text-white text-2xl font-bold hero-number-small">0</div>
+                        </div>
                     </div>
-                    <div id="university" class="text-2xl font-bold text-purple-600 mb-1">0</div>
                     <div class="text-sm text-gray-600 font-medium">Universidad</div>
                 </div>
             </div>
-        </section>
+        </section><br>
 
         <!-- Grupos por Edad -->
         <section class="animate-slide-in" style="animation-delay: 0.3s;">
@@ -493,7 +545,7 @@
                 Grupos por Edad
             </h2>
             <div id="ageGroupCards" class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-4"></div>
-        </section>
+        </section><br>
 
         <!-- Tutoras -->
         <section class="animate-slide-in" style="animation-delay: 0.5s;">
@@ -502,7 +554,7 @@
                 Distribución por Tutoras
             </h2>
             <div id="tutorCards" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"></div>
-        </section>
+        </section><br>
 
         <!-- Actividades -->
         <section class="animate-slide-in" style="animation-delay: 0.7s;">
@@ -510,7 +562,7 @@
                 <i class="fas fa-calendar-week"></i>
                 Actividades de la Semana
             </h2>
-            
+
             <div class="activities-card">
                 <div id="activitiesContent">
                     <div id="activitiesContainer"></div>
@@ -521,7 +573,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section><br>
     </main>
 
     <!-- Floating Refresh Button -->
@@ -537,7 +589,7 @@
                 this.lastUpdate = null;
                 this.retryCount = 0;
                 this.maxRetries = 3;
-                
+
                 this.initializeEventListeners();
                 this.loadData();
                 this.startAutoRefresh();
@@ -591,7 +643,7 @@
                 `;
 
                 document.getElementById('notifications').appendChild(notification);
-                
+
                 setTimeout(() => notification.classList.add('show'), 100);
                 setTimeout(() => {
                     notification.classList.remove('show');
@@ -601,7 +653,7 @@
 
             updateLastUpdate() {
                 this.lastUpdate = new Date();
-                document.getElementById('lastUpdate').textContent = 
+                document.getElementById('lastUpdate').textContent =
                     `Última actualización: ${this.lastUpdate.toLocaleTimeString()}`;
             }
 
@@ -739,7 +791,7 @@
 
             processSex(participant, stats) {
                 const sex = participant.SEXO ? participant.SEXO.toUpperCase().trim() : '';
-                
+
                 if (sex === '-' || sex === '' || !participant['FECHA NACIMIENTO']) {
                     stats.notBorn++;
                 } else if (sex === 'FEMENINO' || sex === 'F') {
@@ -757,16 +809,16 @@
                     stats.university++;
                 } else if (tecnico && tecnico !== '-' && tecnico !== '') {
                     stats.technical++;
-                } else if (grado.includes('BACHILLERATO') || grado.includes('SECUNDARIA') || 
-                          grado.includes('10') || grado.includes('11') || 
-                          grado.includes('6') || grado.includes('7') || 
-                          grado.includes('8') || grado.includes('9')) {
+                } else if (grado.includes('BACHILLERATO') || grado.includes('SECUNDARIA') ||
+                    grado.includes('10') || grado.includes('11') ||
+                    grado.includes('6') || grado.includes('7') ||
+                    grado.includes('8') || grado.includes('9')) {
                     stats.inHighSchool++;
-                } else if (grado.includes('PRIMARIA') || grado.includes('PREESCOLAR') || 
-                          grado.includes('1') || grado.includes('2') || 
-                          grado.includes('3') || grado.includes('4') || 
-                          grado.includes('5') || grado.includes('KINDER') || 
-                          grado.includes('JARDIN')) {
+                } else if (grado.includes('PRIMARIA') || grado.includes('PREESCOLAR') ||
+                    grado.includes('1') || grado.includes('2') ||
+                    grado.includes('3') || grado.includes('4') ||
+                    grado.includes('5') || grado.includes('KINDER') ||
+                    grado.includes('JARDIN')) {
                     stats.inPrimary++;
                 } else if (grado === '-' || grado === '' || grado === 'NO ESTUDIA') {
                     stats.notStudying++;
@@ -787,7 +839,7 @@
 
             processAge(participant, stats) {
                 const age = this.calculateAge(participant['FECHA NACIMIENTO']);
-                
+
                 if (age === null) {
                     return; // No se puede calcular la edad
                 }
@@ -824,18 +876,18 @@
                 try {
                     const today = new Date();
                     const birth = new Date(birthDate);
-                    
+
                     if (isNaN(birth.getTime())) {
                         return null;
                     }
 
                     let age = today.getFullYear() - birth.getFullYear();
                     const monthDiff = today.getMonth() - birth.getMonth();
-                    
+
                     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
                         age--;
                     }
-                    
+
                     return Math.max(0, age);
                 } catch (error) {
                     return null;
@@ -859,7 +911,7 @@
 
             updateProgressRings(stats) {
                 const total = stats.total || 1; // Evitar división por cero
-                
+
                 const boysPercent = Math.round((stats.boys / total) * 100);
                 const girlsPercent = Math.round((stats.girls / total) * 100);
                 const notBornPercent = Math.round((stats.notBorn / total) * 100);
@@ -929,9 +981,9 @@
                 Object.entries(tutorCounts).forEach(([tutor, count], index) => {
                     const card = document.createElement('div');
                     card.className = 'tutor-card';
-                    
+
                     const initials = tutor.split(' ').map(word => word[0]).join('').substring(0, 2).toUpperCase();
-                    
+
                     card.innerHTML = `
                         <div class="tutor-avatar" style="background: ${colors[index % colors.length]}">
                             ${initials}
@@ -946,7 +998,7 @@
             processActivities(activities) {
                 const container = document.getElementById('activitiesContainer');
                 const noActivitiesMessage = document.getElementById('noActivitiesMessage');
-                
+
                 container.innerHTML = '';
 
                 if (!activities || activities.length === 0) {
@@ -980,7 +1032,7 @@
                     const activityDate = new Date(activity.FECHA);
                     const day = activityDate.getDate().toString().padStart(2, '0');
                     const month = activityDate.toLocaleDateString('es-ES', { month: 'short' }).toUpperCase();
-                    
+
                     const activityItem = document.createElement('div');
                     activityItem.className = 'activity-item';
                     activityItem.innerHTML = `
@@ -1013,7 +1065,7 @@
 
             animateCounters() {
                 const counters = document.querySelectorAll('.hero-number, .metric-circle, .progress-content > div, .age-card .text-2xl, .tutor-card .text-2xl');
-                
+
                 counters.forEach(counter => {
                     const target = parseInt(counter.textContent) || 0;
                     let current = 0;
@@ -1050,4 +1102,5 @@
         });
     </script>
 </body>
+
 </html>
