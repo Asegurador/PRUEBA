@@ -22,7 +22,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #03d827 10%, #df3f23 40%, #e206e2 60%);
+            background: linear-gradient(135deg, #03d827 0%, #df3f23 20%, #e206e2 80%);
             background-attachment: fixed;
             min-height: 100vh;
         }
@@ -80,12 +80,33 @@
             font-size: 1.5rem;
             box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         .metric-circle:hover {
             transform: scale(1.1);
             box-shadow: 0 12px 35px rgba(99, 102, 241, 0.6);
         }
+
+        .metric-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Ajustes para el número dentro del círculo */
+        .metric-content div[id] {
+            color: white;
+            line-height: 1;
+            margin-top: -5px;
+        }
+
 
         .hero-number {
             font-size: 5rem;
@@ -167,6 +188,10 @@
             position: relative;
             z-index: 1;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .status-dot {
@@ -373,19 +398,16 @@
 </head>
 
 <body>
-    <!-- Floating Shapes Background -->
     <div class="floating-shapes">
-        <div class="shape" style="width: 80px; height: 80px; left: 10%; animation-delay:  -2s;"></div>
+        <div class="shape" style="width: 80px; height: 80px; left: 10%; animation-delay: -2s;"></div>
         <div class="shape" style="width: 60px; height: 60px; left: 80%; animation-delay: -8s;"></div>
         <div class="shape" style="width: 100px; height: 100px; left: 50%; animation-delay: -5s;"></div>
         <div class="shape" style="width: 40px; height: 40px; left: 30%; animation-delay: -12s;"></div>
         <div class="shape" style="width: 70px; height: 70px; left: 70%; animation-delay: -3s;"></div>
     </div>
 
-    <!-- Notification Container -->
     <div id="notifications"></div>
 
-    <!-- Header -->
     <header class="relative py-4 sm:py-8 mb-4 sm:mb-8">
         <div class="container-fluid mx-auto px-4">
             <div class="header-glass rounded-3xl p-4 sm:p-6 md:p-8">
@@ -426,23 +448,20 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="container-fluid space-y-12 pb-20">
 
-        <!-- Resumen Principal -->
         <section class="animate-slide-in" style="animation-delay: 0.1s;">
             <h2 class="section-title">
                 <i class="fas fa-users"></i>
                 Resumen General
             </h2>
 
-            <!-- Hero Card -->
             <div class="card-modern p-6 sm:p-8 md:p-10 text-center mb-8">
                 <div class="text-base sm:text-lg font-semibold text-gray-600 mb-2 sm:mb-4 uppercase tracking-wider">
                     Total de Participantes
                 </div>
                 <div id="totalParticipants" class="text-6xl sm:text-7xl font-extrabold text-purple-700 mb-6 sm:mb-8">0</div>
-            
+
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-xl mx-auto">
                     <div class="text-center">
                         <div class="progress-ring mx-auto mb-2 sm:mb-4" style="--progress: 0%" id="boysRing">
@@ -453,7 +472,7 @@
                             </div>
                         </div>
                     </div>
-            
+
                     <div class="text-center">
                         <div class="progress-ring mx-auto mb-2 sm:mb-4" style="--progress: 0%" id="girlsRing">
                             <div class="progress-content flex flex-col items-center justify-center">
@@ -463,7 +482,7 @@
                             </div>
                         </div>
                     </div>
-            
+
                     <div class="text-center">
                         <div class="progress-ring mx-auto mb-2 sm:mb-4" style="--progress: 0%" id="notBornRing">
                             <div class="progress-content flex flex-col items-center justify-center">
@@ -482,101 +501,97 @@
                     Educación
                 </h2>
 
-            <!-- Educación -->
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div class="card-modern p-6 text-center">
-                    <div class="metric-circle mx-auto mb-4"
-                         style="background: linear-gradient(135deg, #ef4444, #dc2626);">
-                        <div class="metric-content"> <i class="fas fa-times text-white text-3xl"></i> <div id="notStudying" class="text-white text-2xl font-bold hero-number-small">0</div>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <div class="card-modern p-6 text-center">
+                        <div class="metric-circle mx-auto mb-4"
+                            style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                            <div class="metric-content"> <i class="fas fa-times text-white text-3xl"></i>
+                                <div id="notStudying" class="text-white text-2xl font-bold hero-number-small">0</div>
+                            </div>
                         </div>
+                        <div class="text-sm text-gray-600 font-medium">Sin Estudios</div>
                     </div>
-                    <div class="text-sm text-gray-600 font-medium">Sin Estudios</div>
-                </div>
-            
-                <div class="card-modern p-6 text-center">
-                    <div class="metric-circle mx-auto mb-4"
-                         style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
-                        <div class="metric-content">
-                            <i class="fas fa-book text-white text-3xl"></i>
-                            <div id="inPrimary" class="text-white text-2xl font-bold hero-number-small">0</div>
-                        </div>
-                    </div>
-                    <div class="text-sm text-gray-600 font-medium">Primaria</div>
-                </div>
-            
-                <div class="card-modern p-6 text-center">
-                    <div class="metric-circle mx-auto mb-4"
-                         style="background: linear-gradient(135deg, #10b981, #059669);">
-                        <div class="metric-content">
-                            <i class="fas fa-user-graduate text-white text-3xl"></i>
-                            <div id="inHighSchool" class="text-white text-2xl font-bold hero-number-small">0</div>
-                        </div>
-                    </div>
-                    <div class="text-sm text-gray-600 font-medium">Bachillerato</div>
-                </div>
-            
-                <div class="card-modern p-6 text-center">
-                    <div class="metric-circle mx-auto mb-4"
-                         style="background: linear-gradient(135deg, #f59e0b, #d97706);">
-                        <div class="metric-content">
-                            <i class="fas fa-tools text-white text-3xl"></i>
-                            <div id="technical" class="text-white text-2xl font-bold hero-number-small">0</div>
-                        </div>
-                    </div>
-                    <div class="text-sm text-gray-600 font-medium">Técnico</div>
-                </div>
-            
-                <div class="card-modern p-6 text-center">
-                    <div class="metric-circle mx-auto mb-4">
-                        <div class="metric-content">
-                            <i class="fas fa-university text-white text-3xl"></i>
-                            <div id="university" class="text-white text-2xl font-bold hero-number-small">0</div>
-                        </div>
-                    </div>
-                    <div class="text-sm text-gray-600 font-medium">Universidad</div>
-                </div>
-            </div>
-        </section><br>
 
-        <!-- Grupos por Edad -->
-        <section class="animate-slide-in" style="animation-delay: 0.3s;">
-            <h2 class="section-title">
-                <i class="fas fa-layer-group"></i>
-                Grupos por Edad
-            </h2>
-            <div id="ageGroupCards" class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-4"></div>
-        </section><br>
+                    <div class="card-modern p-6 text-center">
+                        <div class="metric-circle mx-auto mb-4"
+                            style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                            <div class="metric-content">
+                                <i class="fas fa-book text-white text-3xl"></i>
+                                <div id="inPrimary" class="text-white text-2xl font-bold hero-number-small">0</div>
+                            </div>
+                        </div>
+                        <div class="text-sm text-gray-600 font-medium">Primaria</div>
+                    </div>
 
-        <!-- Tutoras -->
-        <section class="animate-slide-in" style="animation-delay: 0.5s;">
-            <h2 class="section-title">
-                <i class="fas fa-chalkboard-teacher"></i>
-                Distribución por Tutoras
-            </h2>
-            <div id="tutorCards" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"></div>
-        </section><br>
+                    <div class="card-modern p-6 text-center">
+                        <div class="metric-circle mx-auto mb-4"
+                            style="background: linear-gradient(135deg, #10b981, #059669);">
+                            <div class="metric-content">
+                                <i class="fas fa-user-graduate text-white text-3xl"></i>
+                                <div id="inHighSchool" class="text-white text-2xl font-bold hero-number-small">0</div>
+                            </div>
+                        </div>
+                        <div class="text-sm text-gray-600 font-medium">Bachillerato</div>
+                    </div>
 
-        <!-- Actividades -->
-        <section class="animate-slide-in" style="animation-delay: 0.7s;">
-            <h2 class="section-title">
-                <i class="fas fa-calendar-week"></i>
-                Actividades de la Semana
-            </h2>
+                    <div class="card-modern p-6 text-center">
+                        <div class="metric-circle mx-auto mb-4"
+                            style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                            <div class="metric-content">
+                                <i class="fas fa-tools text-white text-3xl"></i>
+                                <div id="technical" class="text-white text-2xl font-bold hero-number-small">0</div>
+                            </div>
+                        </div>
+                        <div class="text-sm text-gray-600 font-medium">Técnico</div>
+                    </div>
 
-            <div class="activities-card">
-                <div id="activitiesContent">
-                    <div id="activitiesContainer"></div>
-                    <div id="noActivitiesMessage" class="hidden text-center py-16">
-                        <div class="text-8xl mb-6 opacity-20">📅</div>
-                        <h3 class="text-2xl font-bold text-gray-600 mb-3">No hay actividades programadas</h3>
-                        <p class="text-gray-500 text-lg">¡Tiempo perfecto para planificar nuevas aventuras!</p>
+                    <div class="card-modern p-6 text-center">
+                        <div class="metric-circle mx-auto mb-4">
+                            <div class="metric-content">
+                                <i class="fas fa-university text-white text-3xl"></i>
+                                <div id="university" class="text-white text-2xl font-bold hero-number-small">0</div>
+                            </div>
+                        </div>
+                        <div class="text-sm text-gray-600 font-medium">Universidad</div>
                     </div>
                 </div>
-            </div>
-        </section><br>
+            </section><br>
+
+            <section class="animate-slide-in" style="animation-delay: 0.3s;">
+                <h2 class="section-title">
+                    <i class="fas fa-layer-group"></i>
+                    Grupos por Edad
+                </h2>
+                <div id="ageGroupCards" class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-4"></div>
+            </section><br>
+
+            <section class="animate-slide-in" style="animation-delay: 0.5s;">
+                <h2 class="section-title">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    Distribución por Tutoras
+                </h2>
+                <div id="tutorCards" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"></div>
+            </section><br>
+
+            <section class="animate-slide-in" style="animation-delay: 0.7s;">
+                <h2 class="section-title">
+                    <i class="fas fa-calendar-week"></i>
+                    Actividades de la Semana
+                </h2>
+
+                <div class="activities-card">
+                    <div id="activitiesContent">
+                        <div id="activitiesContainer"></div>
+                        <div id="noActivitiesMessage" class="hidden text-center py-16">
+                            <div class="text-8xl mb-6 opacity-20">📅</div>
+                            <h3 class="text-2xl font-bold text-gray-600 mb-3">No hay actividades programadas</h3>
+                            <p class="text-gray-500 text-lg">¡Tiempo perfecto para planificar nuevas aventuras!</p>
+                        </div>
+                    </div>
+                </div>
+            </section><br>
     </main>
 
-    <!-- Floating Refresh Button -->
     <button id="floatingRefresh" class="floating-refresh">
         <i class="fas fa-sync-alt text-xl"></i>
     </button>
@@ -774,7 +789,8 @@
                         'VENCEDORES (9-11)': 0,
                         'VISIONARIOS (12-14)': 0,
                         'GENERACIÓN EX. (15-18)': 0,
-                        'JÓVENES (19+)': 0
+                        'JÓVENES (19+)': 0,
+                        'SIN CDPR/EDAD': 0 // Nuevo grupo para no clasificados
                     },
                     tutorCounts: {}
                 };
@@ -791,7 +807,9 @@
 
             processSex(participant, stats) {
                 const sex = participant.SEXO ? participant.SEXO.toUpperCase().trim() : '';
-
+                // No se modifica la lógica de 'notBorn' aquí directamente por 'Financiamiento'
+                // para evitar doble conteo si ya se maneja en processAge o si hay otra lógica específica.
+                // Si 'Financiamiento' también indica 'por nacer', ajusta aquí.
                 if (sex === '-' || sex === '' || !participant['FECHA NACIMIENTO']) {
                     stats.notBorn++;
                 } else if (sex === 'FEMENINO' || sex === 'F') {
@@ -825,43 +843,83 @@
                 } else {
                     // Clasificación por defecto basada en la edad si el grado no es claro
                     const age = this.calculateAge(participant['FECHA NACIMIENTO']);
-                    if (age >= 18) {
-                        stats.notStudying++;
-                    } else if (age >= 12) {
-                        stats.inHighSchool++;
-                    } else if (age >= 3) {
-                        stats.inPrimary++;
+                    if (age !== null) { // Asegurarse de que la edad se pueda calcular
+                        if (age >= 18) {
+                            stats.notStudying++;
+                        } else if (age >= 12) {
+                            stats.inHighSchool++;
+                        } else if (age >= 3) {
+                            stats.inPrimary++;
+                        } else {
+                            stats.notStudying++; // Si la edad es muy baja y no encaja en primaria
+                        }
                     } else {
-                        stats.notStudying++;
+                        stats.notStudying++; // Si no hay fecha de nacimiento, se asume sin estudio por defecto
                     }
                 }
             }
 
             processAge(participant, stats) {
-                const age = this.calculateAge(participant['FECHA NACIMIENTO']);
+                const financiamiento = (participant.FINANCIAMIENTO || '').toUpperCase().trim();
+                const cdpr = (participant.CDPR || '').toUpperCase().trim(); // Leer el valor del CDPR
 
-                if (age === null) {
-                    return; // No se puede calcular la edad
+                // PRIORIDAD 1: Financiamiento "Supervivencia"
+                if (financiamiento === 'SUPERVIVENCIA') {
+                    stats.ageGroups['SUPERVIVENCIA (0-1)']++;
+                    return; // Clasificado, salir.
                 }
 
-                if (age <= 1) {
-                    stats.ageGroups['SUPERVIVENCIA (0-1)']++;
-                } else if (age <= 2) {
-                    stats.ageGroups['CAMINADORES (1-2)']++;
-                } else if (age <= 5) {
-                    stats.ageGroups['EXPLORADORES (3-5)']++;
-                } else if (age <= 8) {
-                    stats.ageGroups['SEMILLAS (6-8)']++;
-                } else if (age <= 11) {
-                    stats.ageGroups['VENCEDORES (9-11)']++;
-                } else if (age <= 14) {
-                    stats.ageGroups['VISIONARIOS (12-14)']++;
-                } else if (age <= 18) {
-                    stats.ageGroups['GENERACIÓN EX. (15-18)']++;
-                } else {
-                    stats.ageGroups['JÓVENES (19+)']++;
+                // PRIORIDAD 2: Leer directamente del campo CDPR para los grupos etarios
+                // Asegúrate que los valores en tu columna CDPR coincidan con los nombres de tus grupos etarios
+                switch (cdpr) {
+                    case '0-2': // Si CDPR es '0-2', clasificar como Caminadores
+                        stats.ageGroups['CAMINADORES (1-2)']++;
+                        break;
+                    case '3-5':
+                        stats.ageGroups['EXPLORADORES (3-5)']++;
+                        break;
+                    case '6-8':
+                        stats.ageGroups['SEMILLAS (6-8)']++;
+                        break;
+                    case '9-11':
+                        stats.ageGroups['VENCEDORES (9-11)']++;
+                        break;
+                    case '12-14':
+                        stats.ageGroups['VISIONARIOS (12-14)']++;
+                        break;
+                    case '15-18':
+                        stats.ageGroups['GENERACIÓN EX. (15-18)']++;
+                        break;
+                    case '19+': // Asumo que puedes tener "19+" en CDPR para jóvenes/adultos
+                        stats.ageGroups['JÓVENES (19+)']++;
+                        break;
+                    default:
+                        // FALLBACK: Si CDPR no es reconocido, usar la edad calculada como última opción
+                        // Esto manejará los casos donde CDPR esté vacío o contenga un valor no mapeado
+                        const age = this.calculateAge(participant['FECHA NACIMIENTO']);
+                        if (age === null) {
+                            stats.ageGroups['SIN CDPR/EDAD']++; // Para quienes no tienen ni CDPR ni fecha de nacimiento
+                        } else if (age === 0 || age === 1) { // 0 o 1 año por edad (si no fue Supervivencia por Financiamiento)
+                            stats.ageGroups['SUPERVIVENCIA (0-1)']++;
+                        } else if (age === 2) { // 2 años por edad (si no fue Caminadores por CDPR)
+                            stats.ageGroups['CAMINADORES (1-2)']++;
+                        } else if (age <= 5) {
+                            stats.ageGroups['EXPLORADORES (3-5)']++;
+                        } else if (age <= 8) {
+                            stats.ageGroups['SEMILLAS (6-8)']++;
+                        } else if (age <= 11) {
+                            stats.ageGroups['VENCEDORES (9-11)']++;
+                        } else if (age <= 14) {
+                            stats.ageGroups['VISIONARIOS (12-14)']++;
+                        } else if (age <= 18) {
+                            stats.ageGroups['GENERACIÓN EX. (15-18)']++;
+                        } else {
+                            stats.ageGroups['JÓVENES (19+)']++;
+                        }
+                        break;
                 }
             }
+
 
             processTutor(participant, stats) {
                 const tutor = participant.TUTORA || 'Sin Tutora';
@@ -925,41 +983,51 @@
                 const container = document.getElementById('ageGroupCards');
                 container.innerHTML = '';
 
-                const colors = [
-                    'linear-gradient(135deg, #ff6b6b, #ee5a52)',
-                    'linear-gradient(135deg, #4ecdc4, #44a08d)',
-                    'linear-gradient(135deg, #45b7d1, #96c93d)',
-                    'linear-gradient(135deg, #f9ca24, #f0932b)',
-                    'linear-gradient(135deg, #eb4d4b, #c44569)',
-                    'linear-gradient(135deg, #6c5ce7, #a29bfe)',
-                    'linear-gradient(135deg, #fd79a8, #fdcb6e)',
-                    'linear-gradient(135deg, #00b894, #00cec9)'
+                // Define colores e iconos de forma que se puedan mapear o rotar
+                const groupDefinitions = {
+                    'SUPERVIVENCIA (0-1)': { color: 'linear-gradient(135deg, #ff6b6b, #ee5a52)', icon: 'fa-baby' },
+                    'CAMINADORES (1-2)': { color: 'linear-gradient(135deg, #4ecdc4, #44a08d)', icon: 'fa-child' },
+                    'EXPLORADORES (3-5)': { color: 'linear-gradient(135deg, #45b7d1, #96c93d)', icon: 'fa-puzzle-piece' },
+                    'SEMILLAS (6-8)': { color: 'linear-gradient(135deg, #f9ca24, #f0932b)', icon: 'fa-seedling' },
+                    'VENCEDORES (9-11)': { color: 'linear-gradient(135deg, #eb4d4b, #c44569)', icon: 'fa-trophy' },
+                    'VISIONARIOS (12-14)': { color: 'linear-gradient(135deg, #6c5ce7, #a29bfe)', icon: 'fa-eye' },
+                    'GENERACIÓN EX. (15-18)': { color: 'linear-gradient(135deg, #fd79a8, #fdcb6e)', icon: 'fa-rocket' },
+                    'JÓVENES (19+)': { color: 'linear-gradient(135deg, #00b894, #00cec9)', icon: 'fa-star' },
+                    'SIN CDPR/EDAD': { color: 'linear-gradient(135deg, #a0aec0, #718096)', icon: 'fa-question-circle' } // Color/icono para no clasificados
+                };
+
+                // Asegurar el orden de los grupos al mostrar
+                const orderedGroups = [
+                    'SUPERVIVENCIA (0-1)',
+                    'CAMINADORES (1-2)',
+                    'EXPLORADORES (3-5)',
+                    'SEMILLAS (6-8)',
+                    'VENCEDORES (9-11)',
+                    'VISIONARIOS (12-14)',
+                    'GENERACIÓN EX. (15-18)',
+                    'JÓVENES (19+)',
+                    'SIN CDPR/EDAD' // Asegurarse de que aparezca al final
                 ];
 
-                const icons = [
-                    'fa-baby',
-                    'fa-child',
-                    'fa-puzzle-piece',
-                    'fa-seedling',
-                    'fa-trophy',
-                    'fa-eye',
-                    'fa-rocket',
-                    'fa-star'
-                ];
+                orderedGroups.forEach(groupName => {
+                    const count = ageGroups[groupName] || 0; // Obtener el conteo o 0 si no existe
+                    const def = groupDefinitions[groupName];
 
-                Object.entries(ageGroups).forEach(([group, count], index) => {
-                    const card = document.createElement('div');
-                    card.className = 'age-card';
-                    card.innerHTML = `
-                        <div class="age-icon" style="background: ${colors[index % colors.length]}">
-                            <i class="fas ${icons[index % icons.length]}"></i>
-                        </div>
-                        <div class="text-2xl font-bold text-gray-700 mb-1">${count}</div>
-                        <div class="text-xs text-gray-600 font-medium leading-tight">${group}</div>
-                    `;
-                    container.appendChild(card);
+                    if (def) { // Solo si el grupo está definido
+                        const card = document.createElement('div');
+                        card.className = 'age-card';
+                        card.innerHTML = `
+                            <div class="age-icon" style="background: ${def.color}">
+                                <i class="fas ${def.icon}"></i>
+                            </div>
+                            <div class="text-2xl font-bold text-gray-700 mb-1">${count}</div>
+                            <div class="text-xs text-gray-600 font-medium leading-tight">${groupName}</div>
+                        `;
+                        container.appendChild(card);
+                    }
                 });
             }
+
 
             updateTutorCards(tutorCounts) {
                 const container = document.getElementById('tutorCards');
@@ -1084,7 +1152,7 @@
         }
 
         // Inicializar cuando el DOM esté listo
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => { 
             new ParticipantsDashboard();
         });
 
